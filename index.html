@@ -1,1615 +1,247 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Hub</title>
-
-  <link
-    rel="icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>"
-  >
-
-  <style>
-    :root {
-      --text: #ffffff;
-      --text-dim: rgba(255, 255, 255, 0.65);
-      --accent: #38bdf8;
-
-      --glass-bg: rgba(255, 255, 255, 0.05);
-      --glass-border: rgba(255, 255, 255, 0.12);
-
-      --item-bg: rgba(255, 255, 255, 0.04);
-      --item-hover: rgba(255, 255, 255, 0.10);
-
-      --download-bg: rgba(16, 185, 129, 0.15);
-      --download-border: rgba(16, 185, 129, 0.35);
-      --download-text: #34d399;
-      --download-hover: rgba(16, 185, 129, 0.30);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      padding: 40px 20px 60px;
-      color: var(--text);
-      background-color: #0b0f19;
-
-      background-image:
-        radial-gradient(
-          at 0% 0%,
-          rgba(56, 189, 248, 0.15) 0px,
-          transparent 50%
-        ),
-        radial-gradient(
-          at 100% 100%,
-          rgba(139, 92, 246, 0.15) 0px,
-          transparent 50%
-        ),
-        radial-gradient(
-          at 50% 50%,
-          rgba(15, 23, 42, 0.8) 0px,
-          transparent 100%
-        );
-
-      background-attachment: fixed;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    /* HEADER */
-
-    .header {
-      text-align: center;
-      margin-bottom: 35px;
-    }
-
-    .logo {
-      font-size: 28px;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.25));
-    }
-
-    .clock {
-      font-size: 42px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      line-height: 1;
-    }
-
-    .date {
-      margin-top: 10px;
-      color: var(--text-dim);
-      font-size: 14px;
-      text-transform: capitalize;
-    }
-
-    /* SEARCH */
-
-    .search-box {
-      margin-bottom: 35px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .search-form {
-      width: 100%;
-      max-width: 580px;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 16px 24px;
-      font-size: 15px;
-      text-align: center;
-
-      border-radius: 9999px;
-      border: 1px solid var(--glass-border);
-
-      background: rgba(255, 255, 255, 0.05);
-
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-
-      color: var(--text);
-      outline: none;
-      transition: all 0.25s ease;
-
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    }
-
-    .search-input:focus {
-      border-color: rgba(56, 189, 248, 0.5);
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
-    }
-
-    .search-input::placeholder {
-      color: var(--text-dim);
-    }
-
-    /* GRID */
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 20px;
-    }
-
-    /* 3 сверху */
-
-    .grid > .card:nth-child(1),
-    .grid > .card:nth-child(2),
-    .grid > .card:nth-child(3) {
-      grid-column: span 2;
-    }
-
-    /* 2 снизу */
-
-    .grid > .card:nth-child(4),
-    .grid > .card:nth-child(5) {
-      grid-column: span 3;
-    }
-
-    /* Блокноты на всю ширину */
-
-    .notes-card {
-      grid-column: 1 / -1 !important;
-    }
-
-    /* CARDS */
-
-    .card {
-      background: var(--glass-bg);
-
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-
-      padding: 22px;
-
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
-
-      transition:
-        transform 0.25s ease,
-        border-color 0.25s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(255, 255, 255, 0.25);
-    }
-
-    .card-title {
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-
-      color: var(--text-dim);
-
-      margin-bottom: 18px;
-      text-align: center;
-    }
-
-    /* LINKS */
-
-    .link-list {
-      list-style: none;
-
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-    }
-
-    .link-item a {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      text-decoration: none;
-      color: var(--text);
-
-      padding: 11px 15px;
-
-      border-radius: 12px;
-
-      background: var(--item-bg);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-
-      transition: all 0.2s ease;
-      font-size: 14px;
-    }
-
-    .link-item a:hover {
-      background: var(--item-hover);
-      border-color: rgba(255, 255, 255, 0.18);
-      color: #fff;
-
-      transform: translateX(4px);
-    }
-
-    /* DOWNLOAD */
-
-    .download-link a {
-      background: var(--download-bg);
-      border-color: var(--download-border);
-
-      color: var(--download-text);
-      font-weight: 600;
-    }
-
-    .download-link a:hover {
-      background: var(--download-hover);
-      border-color: #34d399;
-
-      color: #fff;
-
-      transform: translateY(-2px);
-
-      box-shadow:
-        0 6px 20px rgba(16, 185, 129, 0.2);
-    }
-
-    .badge {
-      font-size: 11px;
-      padding: 2px 7px;
-
-      border-radius: 6px;
-
-      background: rgba(0, 0, 0, 0.35);
-      color: var(--text-dim);
-    }
-
-    .download-link a:hover .badge {
-      background: #34d399;
-      color: #042f1a;
-      font-weight: 700;
-    }
-
-    /* NOTES */
-
-    .notes-tabs {
-      display: flex;
-      gap: 8px;
-
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-    }
-
-    .note-tab {
-      border: 1px solid var(--glass-border);
-
-      background: var(--item-bg);
-      color: var(--text-dim);
-
-      padding: 8px 12px;
-      border-radius: 10px;
-
-      cursor: pointer;
-      font-size: 13px;
-
-      transition: all 0.2s ease;
-    }
-
-    .note-tab:hover {
-      background: var(--item-hover);
-      color: #fff;
-    }
-
-    .note-tab.active {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: rgba(56, 189, 248, 0.4);
-      color: #7dd3fc;
-    }
-
-    .note-editor {
-      width: 100%;
-      min-height: 220px;
-
-      resize: vertical;
-
-      padding: 16px;
-
-      border-radius: 14px;
-
-      border: 1px solid rgba(255, 255, 255, 0.08);
-
-      background: rgba(0, 0, 0, 0.18);
-
-      color: #fff;
-      outline: none;
-
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .note-editor:focus {
-      border-color: rgba(56, 189, 248, 0.4);
-    }
-
-    .notes-bottom {
-      display: flex;
-
-      justify-content: space-between;
-      align-items: center;
-
-      margin-top: 10px;
-      gap: 10px;
-    }
-
-    .note-status {
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-
-    .clear-note {
-      border: 1px solid rgba(251, 113, 133, 0.3);
-
-      background: rgba(251, 113, 133, 0.08);
-      color: #fda4af;
-
-      padding: 7px 11px;
-
-      border-radius: 9px;
-
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .clear-note:hover {
-      background: rgba(251, 113, 133, 0.16);
-    }
-
-    /* TASKS */
-
-    .tasks-section {
-      margin-top: 28px;
-      padding-top: 22px;
-
-      border-top:
-        1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .tasks-title {
-      font-size: 13px;
-      font-weight: 700;
-
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-
-      color: var(--text-dim);
-
-      margin-bottom: 14px;
-      text-align: center;
-    }
-
-    .task-input-row {
-      display: flex;
-      gap: 9px;
-
-      margin-bottom: 14px;
-    }
-
-    .task-input {
-      flex: 1;
-      min-width: 0;
-
-      padding: 11px 14px;
-
-      border-radius: 12px;
-
-      border:
-        1px solid rgba(255, 255, 255, 0.08);
-
-      background:
-        rgba(0, 0, 0, 0.18);
-
-      color: #fff;
-      outline: none;
-
-      font-size: 14px;
-    }
-
-    .task-input:focus {
-      border-color:
-        rgba(56, 189, 248, 0.4);
-
-      background:
-        rgba(0, 0, 0, 0.25);
-    }
-
-    .task-input::placeholder {
-      color: var(--text-dim);
-    }
-
-    .add-task {
-      flex-shrink: 0;
-
-      border:
-        1px solid rgba(56, 189, 248, 0.35);
-
-      background:
-        rgba(56, 189, 248, 0.12);
-
-      color: #7dd3fc;
-
-      padding: 0 16px;
-
-      border-radius: 12px;
-
-      cursor: pointer;
-
-      font-size: 13px;
-      font-weight: 600;
-
-      transition: all 0.2s ease;
-    }
-
-    .add-task:hover {
-      background:
-        rgba(56, 189, 248, 0.22);
-
-      border-color:
-        rgba(56, 189, 248, 0.55);
-
-      transform:
-        translateY(-1px);
-    }
-
-    .task-list {
-      list-style: none;
-
-      display: flex;
-      flex-direction: column;
-
-      gap: 8px;
-    }
-
-    .task-item {
-      display: flex;
-      align-items: center;
-
-      gap: 10px;
-
-      padding: 11px 13px;
-
-      border-radius: 12px;
-
-      background:
-        var(--item-bg);
-
-      border:
-        1px solid rgba(255, 255, 255, 0.05);
-
-      transition: all 0.2s ease;
-    }
-
-    .task-item:hover {
-      background:
-        var(--item-hover);
-
-      border-color:
-        rgba(255, 255, 255, 0.12);
-    }
-
-    .task-checkbox {
-      width: 18px;
-      height: 18px;
-
-      flex-shrink: 0;
-
-      accent-color:
-        var(--accent);
-
-      cursor: pointer;
-    }
-
-    .task-text {
-      flex: 1;
-      min-width: 0;
-
-      font-size: 14px;
-      color: #fff;
-
-      word-break: break-word;
-    }
-
-    .task-item.completed .task-text {
-      text-decoration: line-through;
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    .delete-task {
-      flex-shrink: 0;
-
-      border: none;
-      background: transparent;
-
-      color: rgba(255, 255, 255, 0.35);
-
-      cursor: pointer;
-
-      font-size: 16px;
-      line-height: 1;
-
-      padding: 3px 5px;
-
-      border-radius: 7px;
-
-      transition: all 0.2s ease;
-    }
-
-    .delete-task:hover {
-      color: #fb7185;
-
-      background:
-        rgba(251, 113, 133, 0.10);
-    }
-
-    .empty-tasks {
-      text-align: center;
-
-      color: rgba(255, 255, 255, 0.35);
-
-      font-size: 13px;
-
-      padding: 10px 0 4px;
-    }
-
-    /* =========================
-       FOOTER SIGNATURE
-    ========================= */
-
-    .signature {
-      position: fixed;
-
-      right: 18px;
-      bottom: 14px;
-
-      color: rgba(255, 255, 255, 0.25);
-
-      font-size: 12px;
-      font-weight: 500;
-
-      letter-spacing: 0.04em;
-
-      pointer-events: none;
-
-      user-select: none;
-
-      text-shadow:
-        0 0 10px rgba(0, 0, 0, 0.4);
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 800px) {
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .grid > .card:nth-child(1),
-      .grid > .card:nth-child(2),
-      .grid > .card:nth-child(3),
-      .grid > .card:nth-child(4),
-      .grid > .card:nth-child(5),
-      .notes-card {
-        grid-column: 1 / -1 !important;
-      }
-
-    }
-
-    @media (max-width: 600px) {
-
-      body {
-        padding:
-          25px 14px 40px;
-      }
-
-      .clock {
-        font-size: 34px;
-      }
-
-      .task-input-row {
-        flex-direction: column;
-      }
-
-      .add-task {
-        min-height: 42px;
-      }
-
-      .signature {
-        right: 12px;
-        bottom: 9px;
-        font-size: 11px;
-      }
-
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Personal Hub</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>">
+
+<style>
+:root{--t:#fff;--dim:#ffffffa6;--a:#38bdf8;--bg:#ffffff0d;--br:#ffffff1f;--item:#ffffff0a}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+body{min-height:100vh;padding:40px 20px 60px;color:var(--t);background:#0b0f19;background-image:radial-gradient(at 0 0,#38bdf826 0,transparent 50%),radial-gradient(at 100% 100%,#8b5cf626 0,transparent 50%),radial-gradient(at 50% 50%,#0f172acc 0,transparent 100%);background-attachment:fixed}
+.container{max-width:1200px;width:100%;margin:auto}
+.header{text-align:center;margin-bottom:35px}.logo{font-size:28px;margin-bottom:8px;filter:drop-shadow(0 0 15px #38bdf840)}
+.clock{font-size:42px;font-weight:700;letter-spacing:.04em;line-height:1}.date{margin-top:10px;color:var(--dim);font-size:14px;text-transform:capitalize}
+.task-indicator{display:inline-flex;align-items:center;gap:8px;margin-top:13px;padding:8px 14px;border:1px solid #38bdf873;border-radius:999px;background:linear-gradient(135deg,#38bdf829,#8b5cf624);color:#bae6fd;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 0 18px #38bdf81f,inset 0 0 15px #ffffff06;backdrop-filter:blur(14px);transition:.2s}
+.task-indicator:hover{transform:translateY(-2px);border-color:#38bdf8bf;background:linear-gradient(135deg,#38bdf83d,#8b5cf633);box-shadow:0 0 25px #38bdf838}
+.indicator-count{min-width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;padding:0 6px;border-radius:999px;background:#38bdf838;color:#7dd3fc;font-size:11px;font-weight:800}
+.task-indicator.all-done{border-color:#34d39959;background:linear-gradient(135deg,#10b98121,#38bdf814);color:#86efac}
+.search-box{margin-bottom:35px;display:flex;justify-content:center}.search-form{width:100%;max-width:580px}
+.search-input{width:100%;padding:16px 24px;font-size:15px;text-align:center;border:1px solid var(--br);border-radius:9999px;background:#ffffff0d;color:var(--t);outline:0;backdrop-filter:blur(20px);box-shadow:0 10px 30px -10px #00000080;transition:.25s}
+.search-input:focus{border-color:#38bdf880;background:#ffffff14;box-shadow:0 0 25px #38bdf840}.search-input::placeholder{color:var(--dim)}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
+.grid>.card:nth-child(1),.grid>.card:nth-child(2),.grid>.card:nth-child(3){grid-column:span 2}
+.grid>.card:nth-child(4),.grid>.card:nth-child(5),.notes-card{grid-column:1/-1}.grid>.card:nth-child(4),.grid>.card:nth-child(5){grid-column:span 3}
+.card{background:var(--bg);backdrop-filter:blur(24px);border:1px solid var(--br);border-radius:20px;padding:22px;box-shadow:0 20px 40px -15px #00000080;transition:.25s}
+.card:hover{transform:translateY(-4px);border-color:#ffffff40}.card-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:18px;text-align:center}
+.link-list,.task-list{list-style:none;display:flex;flex-direction:column;gap:9px}.link-item a{display:flex;align-items:center;justify-content:space-between;text-decoration:none;color:var(--t);padding:11px 15px;border-radius:12px;background:var(--item);border:1px solid #ffffff0d;transition:.2s;font-size:14px}
+.link-item a:hover{background:#ffffff1a;border-color:#ffffff2e;transform:translateX(4px)}
+.download-link a{background:#10b98126;border-color:#10b98159;color:#34d399;font-weight:600}.download-link a:hover{background:#10b9814d;border-color:#34d399;color:#fff;transform:translateY(-2px);box-shadow:0 6px 20px #10b98133}
+.badge{font-size:11px;padding:2px 7px;border-radius:6px;background:#00000059;color:var(--dim)}.download-link a:hover .badge{background:#34d399;color:#042f1a}
+.notes-tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}.note-tab,.clear-note,.add-task{cursor:pointer}
+.note-tab{border:1px solid var(--br);background:var(--item);color:var(--dim);padding:8px 12px;border-radius:10px;font-size:13px;transition:.2s}.note-tab:hover{background:#ffffff1a;color:#fff}.note-tab.active{background:#38bdf826;border-color:#38bdf866;color:#7dd3fc}
+.note-editor{width:100%;min-height:220px;resize:vertical;padding:16px;border:1px solid #ffffff14;border-radius:14px;background:#0000002e;color:#fff;outline:0;font-size:14px;line-height:1.6}.note-editor:focus{border-color:#38bdf866}
+.notes-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px}.note-status{font-size:12px;color:var(--dim)}
+.clear-note{border:1px solid #fb71854d;background:#fb718514;color:#fda4af;padding:7px 11px;border-radius:9px;font-size:12px}.clear-note:hover{background:#fb718529}
+.tasks-section{margin-top:28px;padding-top:22px;border-top:1px solid #ffffff14}.tasks-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:14px;text-align:center}
+.task-input-row{display:flex;gap:9px;margin-bottom:14px}.task-input{flex:1;min-width:0;padding:11px 14px;border:1px solid #ffffff14;border-radius:12px;background:#0000002e;color:#fff;outline:0;font-size:14px}.task-input:focus{border-color:#38bdf866}.task-input::placeholder{color:var(--dim)}
+.add-task{border:1px solid #38bdf859;background:#38bdf81f;color:#7dd3fc;padding:0 16px;border-radius:12px;font-size:13px;font-weight:600;transition:.2s}.add-task:hover{background:#38bdf838;border-color:#38bdf88c;transform:translateY(-1px)}
+.task-item{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:12px;background:var(--item);border:1px solid #ffffff0d}.task-checkbox{width:18px;height:18px;flex-shrink:0;accent-color:var(--a);cursor:pointer}.task-text{flex:1;min-width:0;font-size:14px;word-break:break-word}.task-item.completed .task-text{text-decoration:line-through;color:#ffffff66}
+.delete-task{border:0;background:transparent;color:#ffffff59;cursor:pointer;font-size:16px;padding:3px 5px;border-radius:7px}.delete-task:hover{color:#fb7185;background:#fb71851a}.empty-tasks{text-align:center;color:#ffffff59;font-size:13px;padding:10px 0 4px}
+.signature{position:fixed;right:18px;bottom:14px;color:#ffffff40;font-size:12px;letter-spacing:.04em;pointer-events:none;user-select:none}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.grid>.card,.grid>.card:nth-child(n){grid-column:1/-1!important}}
+@media(max-width:600px){body{padding:25px 14px 40px}.clock{font-size:34px}.task-input-row{flex-direction:column}.add-task{min-height:42px}.signature{right:12px;bottom:9px;font-size:11px}}
+</style>
 </head>
 
 <body>
-
-  <div class="container">
-
-    <!-- HEADER -->
-
-    <header class="header">
-
-      <div class="logo">
-        🌐
-      </div>
-
-      <div
-        class="clock"
-        id="clock"
-      >
-        00:00:00
-      </div>
-
-      <div
-        class="date"
-        id="date"
-      >
-        Загрузка...
-      </div>
-
-    </header>
-
-
-    <!-- SEARCH -->
-
-    <div class="search-box">
-
-      <form
-        class="search-form"
-        action="https://www.google.com/search"
-        method="get"
-      >
-
-        <input
-          class="search-input"
-          type="text"
-          name="q"
-          placeholder="Поиск в Интернете..."
-          autofocus
-          autocomplete="off"
-        >
-
-      </form>
-
-    </div>
-
-
-    <!-- CARDS -->
-
-    <div class="grid">
-
-      <!-- ГЛАВНОЕ -->
-
-      <div class="card">
-
-        <div class="card-title">
-          Главное
-        </div>
-
-        <ul class="link-list">
-
-          <li class="link-item">
-            <a
-              href="https://youtube.com"
-              target="_blank"
-            >
-              YouTube
-            </a>
-          </li>
-
-          <li class="link-item">
-            <a
-              href="https://vk.com"
-              target="_blank"
-            >
-              VK
-            </a>
-          </li>
-
-          <li class="link-item">
-            <a
-              href="https://mail.google.com"
-              target="_blank"
-            >
-              Gmail
-            </a>
-          </li>
-
-          <li class="link-item">
-            <a
-              href="https://drive.google.com"
-              target="_blank"
-            >
-              Google Drive
-            </a>
-          </li>
-
-        </ul>
-
-      </div>
-
-
-      <!-- РАБОЧИЙ СОФТ -->
-
-      <div class="card">
-
-        <div class="card-title">
-          Рабочий софт
-        </div>
-
-        <ul class="link-list">
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://drive.google.com/uc?export=download&id=1854PH1qpLl9852mbHODo_ET6wtMNNWh5"
-              target="_blank"
-            >
-              Connect Setup
-
-              <span class="badge">
-                .rar
-              </span>
-            </a>
-
-          </li>
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://omnissa.link/horizonclient"
-              target="_blank"
-            >
-              Horizon Client
-
-              <span class="badge">
-                download
-              </span>
-            </a>
-
-          </li>
-
-        </ul>
-
-      </div>
-
-
-      <!-- ИГРЫ -->
-
-      <div class="card">
-
-        <div class="card-title">
-          Игры и Драйверы
-        </div>
-
-        <ul class="link-list">
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://store.steampowered.com/about/"
-              target="_blank"
-            >
-              Steam
-
-              <span class="badge">
-                download
-              </span>
-            </a>
-
-          </li>
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://store.epicgames.com/en-US/download"
-              target="_blank"
-            >
-              Epic Games
-
-              <span class="badge">
-                download
-              </span>
-            </a>
-
-          </li>
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://www.nvidia.com/en-us/software/nvidia-app/"
-              target="_blank"
-            >
-              NVIDIA App
-
-              <span class="badge">
-                download
-              </span>
-            </a>
-
-          </li>
-
-        </ul>
-
-      </div>
-
-
-      <!-- СОФТ -->
-
-      <div class="card">
-
-        <div class="card-title">
-          Софт и Система
-        </div>
-
-        <ul class="link-list">
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://www.google.com/chrome/"
-              target="_blank"
-            >
-              Google Chrome
-
-              <span class="badge">
-                download
-              </span>
-            </a>
-
-          </li>
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://drive.google.com/uc?export=download&id=1NZCrzRdn3aOfpjHfYUbQN7s8FYKEZDlV"
-              target="_blank"
-            >
-              Telegram Desktop
-
-              <span class="badge">
-                .exe
-              </span>
-            </a>
-
-          </li>
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://www.qbittorrent.org/download"
-              target="_blank"
-            >
-              qBittorrent
-
-              <span class="badge">
-                download
-              </span>
-            </a>
-
-          </li>
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://www.videolan.org/vlc/"
-              target="_blank"
-            >
-              VLC Player
-
-              <span class="badge">
-                download
-              </span>
-            </a>
-
-          </li>
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://www.rarlab.com/download.htm"
-              target="_blank"
-            >
-              WinRAR x64
-
-              <span class="badge">
-                download
-              </span>
-            </a>
-
-          </li>
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://www.7-zip.org/download.html"
-              target="_blank"
-            >
-              7-Zip
-
-              <span class="badge">
-                download
-              </span>
-            </a>
-
-          </li>
-
-        </ul>
-
-      </div>
-
-
-      <!-- СЕТЬ -->
-
-      <div class="card">
-
-        <div class="card-title">
-          Обход / Сеть
-        </div>
-
-        <ul class="link-list">
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://github.com/Flowseal/zapret-discord-youtube/releases"
-              target="_blank"
-            >
-              Zapret Discord/YT
-
-              <span class="badge">
-                releases
-              </span>
-            </a>
-
-          </li>
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://github.com/Flowseal/tg-ws-proxy/releases"
-              target="_blank"
-            >
-              TG WS Proxy
-
-              <span class="badge">
-                releases
-              </span>
-            </a>
-
-          </li>
-
-          <li class="link-item download-link">
-
-            <a
-              href="https://github.com/Takeh1ko/GeoFree"
-              target="_blank"
-            >
-              GeoFree AI
-
-              <span class="badge">
-                GitHub
-              </span>
-            </a>
-
-          </li>
-
-        </ul>
-
-      </div>
-
-
-      <!-- БЛОКНОТЫ -->
-
-      <div class="card notes-card">
-
-        <div class="card-title">
-          Блокноты
-        </div>
-
-
-        <div class="notes-tabs">
-
-          <button
-            class="note-tab active"
-            onclick="switchNote(0)"
-          >
-            Личное
-          </button>
-
-          <button
-            class="note-tab"
-            onclick="switchNote(1)"
-          >
-            Работа
-          </button>
-
-          <button
-            class="note-tab"
-            onclick="switchNote(2)"
-          >
-            Идеи
-          </button>
-
-        </div>
-
-
-        <textarea
-          id="noteEditor"
-          class="note-editor"
-          placeholder="Пиши здесь..."
-        ></textarea>
-
-
-        <div class="notes-bottom">
-
-          <span
-            class="note-status"
-            id="noteStatus"
-          >
-            Сохраняется автоматически
-          </span>
-
-          <button
-            class="clear-note"
-            onclick="clearCurrentNote()"
-          >
-            Очистить
-          </button>
-
-        </div>
-
-
-        <!-- TASKS -->
-
-        <div class="tasks-section">
-
-          <div class="tasks-title">
-            Задачи
-          </div>
-
-
-          <div class="task-input-row">
-
-            <input
-              id="taskInput"
-              class="task-input"
-              type="text"
-              placeholder="Например: скачать драйвер"
-              autocomplete="off"
-            >
-
-            <button
-              class="add-task"
-              onclick="addTask()"
-            >
-              + Добавить
-            </button>
-
-          </div>
-
-
-          <ul
-            id="taskList"
-            class="task-list"
-          ></ul>
-
-        </div>
-
-      </div>
-
-    </div>
-
+<div class="container">
+
+<header class="header">
+  <div class="logo">🌐</div>
+  <div class="clock" id="clock">00:00:00</div>
+  <div class="date" id="date">Загрузка...</div>
+  <button class="task-indicator" id="taskIndicator" onclick="scrollToTasks()">
+    <span id="indicatorIcon">🔔</span>
+    <span id="indicatorText">Загрузка задач...</span>
+    <span class="indicator-count" id="indicatorCount">0</span>
+  </button>
+</header>
+
+<div class="search-box">
+  <form class="search-form" action="https://www.google.com/search" method="get">
+    <input class="search-input" type="text" name="q" placeholder="Поиск в Интернете..." autofocus autocomplete="off">
+  </form>
+</div>
+
+<div class="grid">
+
+<div class="card">
+  <div class="card-title">Главное</div>
+  <ul class="link-list">
+    <li class="link-item"><a href="https://youtube.com" target="_blank">YouTube</a></li>
+    <li class="link-item"><a href="https://vk.com" target="_blank">VK</a></li>
+    <li class="link-item"><a href="https://mail.google.com" target="_blank">Gmail</a></li>
+    <li class="link-item"><a href="https://drive.google.com" target="_blank">Google Drive</a></li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="card-title">Рабочий софт</div>
+  <ul class="link-list">
+    <li class="link-item download-link"><a href="https://drive.google.com/uc?export=download&id=1854PH1qpLl9852mbHODo_ET6wtMNNWh5" target="_blank">Connect Setup <span class="badge">.rar</span></a></li>
+    <li class="link-item download-link"><a href="https://vdi.tb.ru/windows" target="_blank">Horizon Client <span class="badge">download</span></a></li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="card-title">Игры и Драйверы</div>
+  <ul class="link-list">
+    <li class="link-item download-link"><a href="https://store.steampowered.com/about/" target="_blank">Steam <span class="badge">download</span></a></li>
+    <li class="link-item download-link"><a href="https://store.epicgames.com/en-US/download" target="_blank">Epic Games <span class="badge">download</span></a></li>
+    <li class="link-item download-link"><a href="https://www.nvidia.com/en-us/software/nvidia-app/" target="_blank">NVIDIA App <span class="badge">download</span></a></li>
+    <li class="link-item download-link"><a href="https://drive.google.com/file/d/1uMfRt66ac9AfvYoXQlEmAk7eq7EfSAI7/view?usp=sharing" target="_blank">Discord <span class="badge">download</span></a></li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="card-title">Софт и Система</div>
+  <ul class="link-list">
+    <li class="link-item download-link"><a href="https://www.google.com/chrome/" target="_blank">Google Chrome <span class="badge">download</span></a></li>
+    <li class="link-item download-link"><a href="https://drive.google.com/uc?export=download&id=1NZCrzRdn3aOfpjHfYUbQN7s8FYKEZDlV" target="_blank">Telegram Desktop <span class="badge">.exe</span></a></li>
+    <li class="link-item download-link"><a href="https://www.qbittorrent.org/download" target="_blank">qBittorrent <span class="badge">download</span></a></li>
+    <li class="link-item download-link"><a href="https://www.videolan.org/vlc/" target="_blank">VLC Player <span class="badge">download</span></a></li>
+    <li class="link-item download-link"><a href="https://www.rarlab.com/download.htm" target="_blank">WinRAR x64 <span class="badge">download</span></a></li>
+    <li class="link-item download-link"><a href="https://www.7-zip.org/download.html" target="_blank">7-Zip <span class="badge">download</span></a></li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="card-title">Обход / Сеть</div>
+  <ul class="link-list">
+    <li class="link-item download-link"><a href="https://github.com/Flowseal/zapret-discord-youtube/releases" target="_blank">Zapret Discord/YT <span class="badge">releases</span></a></li>
+    <li class="link-item download-link"><a href="https://github.com/Flowseal/tg-ws-proxy/releases" target="_blank">TG WS Proxy <span class="badge">releases</span></a></li>
+    <li class="link-item download-link"><a href="https://github.com/Takeh1ko/GeoFree" target="_blank">GeoFree AI <span class="badge">GitHub</span></a></li>
+  </ul>
+</div>
+
+<div class="card notes-card" id="notesCard">
+  <div class="card-title">Блокноты</div>
+
+  <div class="notes-tabs">
+    <button class="note-tab active" onclick="switchNote(0)">Личное</button>
+    <button class="note-tab" onclick="switchNote(1)">Работа</button>
+    <button class="note-tab" onclick="switchNote(2)">Идеи</button>
   </div>
 
+  <textarea id="noteEditor" class="note-editor" placeholder="Пиши здесь..."></textarea>
 
-  <!-- SIGNATURE -->
-
-  <div class="signature">
-    By Tsoykkk
+  <div class="notes-bottom">
+    <span class="note-status" id="noteStatus">Сохраняется автоматически</span>
+    <button class="clear-note" onclick="clearCurrentNote()">Очистить</button>
   </div>
 
-
-  <script>
-
-    /* =========================
-       CLOCK
-    ========================= */
-
-    function updateClock() {
-
-      const now = new Date();
-
-      const time =
-        now.toLocaleTimeString(
-          'ru-RU',
-          {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-          }
-        );
-
-      const date =
-        now.toLocaleDateString(
-          'ru-RU',
-          {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-          }
-        );
-
-      document.getElementById(
-        'clock'
-      ).textContent = time;
-
-      document.getElementById(
-        'date'
-      ).textContent = date;
-
-    }
-
-    updateClock();
-
-    setInterval(
-      updateClock,
-      1000
-    );
-
-
-    /* =========================
-       NOTES
-    ========================= */
-
-    const notes = [
-      '',
-      '',
-      ''
-    ];
-
-    let currentNote = 0;
-
-
-    const editor =
-      document.getElementById(
-        'noteEditor'
-      );
-
-    const status =
-      document.getElementById(
-        'noteStatus'
-      );
-
-
-    /* LOAD NOTES */
-
-    for (
-      let i = 0;
-      i < notes.length;
-      i++
-    ) {
-
-      const saved =
-        localStorage.getItem(
-          'personalHubNote_' + i
-        );
-
-      if (
-        saved !== null
-      ) {
-
-        notes[i] = saved;
-
-      }
-
-    }
-
-
-    editor.value =
-      notes[currentNote];
-
-
-    /* SWITCH NOTE */
-
-    function switchNote(index) {
-
-      notes[currentNote] =
-        editor.value;
-
-      localStorage.setItem(
-        'personalHubNote_' + currentNote,
-        editor.value
-      );
-
-
-      currentNote =
-        index;
-
-      editor.value =
-        notes[currentNote];
-
-
-      document
-        .querySelectorAll(
-          '.note-tab'
-        )
-        .forEach(
-          (tab, i) => {
-
-            tab.classList.toggle(
-              'active',
-              i === currentNote
-            );
-
-          }
-        );
-
-
-      renderTasks();
-
-      status.textContent =
-        'Блокнот переключён';
-
-    }
-
-
-    /* SAVE NOTE */
-
-    editor.addEventListener(
-      'input',
-      function () {
-
-        notes[currentNote] =
-          editor.value;
-
-        localStorage.setItem(
-          'personalHubNote_' + currentNote,
-          editor.value
-        );
-
-        status.textContent =
-          'Сохранено';
-
-        clearTimeout(
-          window.noteSaveTimer
-        );
-
-        window.noteSaveTimer =
-          setTimeout(
-            () => {
-
-              status.textContent =
-                'Сохраняется автоматически';
-
-            },
-            1200
-          );
-
-      }
-    );
-
-
-    /* CLEAR NOTE */
-
-    function clearCurrentNote() {
-
-      if (
-        !confirm(
-          'Очистить этот блокнот?'
-        )
-      ) {
-
-        return;
-
-      }
-
-      editor.value =
-        '';
-
-      notes[currentNote] =
-        '';
-
-      localStorage.removeItem(
-        'personalHubNote_' + currentNote
-      );
-
-      status.textContent =
-        'Блокнот очищен';
-
-    }
-
-
-    /* =========================
-       TASKS
-    ========================= */
-
-    let tasks = [
-      [],
-      [],
-      []
-    ];
-
-
-    /* LOAD TASKS */
-
-    for (
-      let i = 0;
-      i < 3;
-      i++
-    ) {
-
-      const savedTasks =
-        localStorage.getItem(
-          'personalHubTasks_' + i
-        );
-
-      if (
-        savedTasks !== null
-      ) {
-
-        try {
-
-          tasks[i] =
-            JSON.parse(savedTasks);
-
-        } catch {
-
-          tasks[i] =
-            [];
-
-        }
-
-      }
-
-    }
-
-
-    /* SAVE TASKS */
-
-    function saveTasks() {
-
-      localStorage.setItem(
-        'personalHubTasks_' + currentNote,
-        JSON.stringify(
-          tasks[currentNote]
-        )
-      );
-
-    }
-
-
-    /* RENDER TASKS */
-
-    function renderTasks() {
-
-      const taskList =
-        document.getElementById(
-          'taskList'
-        );
-
-      taskList.innerHTML =
-        '';
-
-
-      if (
-        tasks[currentNote].length === 0
-      ) {
-
-        taskList.innerHTML =
-          '<li class="empty-tasks">Задач пока нет</li>';
-
-        return;
-
-      }
-
-
-      tasks[currentNote]
-        .forEach(
-          (task, index) => {
-
-            const li =
-              document.createElement(
-                'li'
-              );
-
-            li.className =
-              'task-item' +
-              (
-                task.completed
-                  ? ' completed'
-                  : ''
-              );
-
-
-            const checkbox =
-              document.createElement(
-                'input'
-              );
-
-            checkbox.type =
-              'checkbox';
-
-            checkbox.className =
-              'task-checkbox';
-
-            checkbox.checked =
-              task.completed;
-
-
-            checkbox.addEventListener(
-              'change',
-              () => {
-
-                tasks[currentNote][index]
-                  .completed =
-                  checkbox.checked;
-
-                saveTasks();
-
-                renderTasks();
-
-              }
-            );
-
-
-            const text =
-              document.createElement(
-                'span'
-              );
-
-            text.className =
-              'task-text';
-
-            text.textContent =
-              task.text;
-
-
-            const deleteButton =
-              document.createElement(
-                'button'
-              );
-
-            deleteButton.className =
-              'delete-task';
-
-            deleteButton.textContent =
-              '×';
-
-            deleteButton.title =
-              'Удалить задачу';
-
-
-            deleteButton.addEventListener(
-              'click',
-              () => {
-
-                tasks[currentNote]
-                  .splice(index, 1);
-
-                saveTasks();
-
-                renderTasks();
-
-              }
-            );
-
-
-            li.appendChild(
-              checkbox
-            );
-
-            li.appendChild(
-              text
-            );
-
-            li.appendChild(
-              deleteButton
-            );
-
-
-            taskList.appendChild(
-              li
-            );
-
-          }
-        );
-
-    }
-
-
-    /* ADD TASK */
-
-    function addTask() {
-
-      const input =
-        document.getElementById(
-          'taskInput'
-        );
-
-      const text =
-        input.value.trim();
-
-
-      if (!text) {
-        return;
-      }
-
-
-      tasks[currentNote].push({
-
-        text: text,
-
-        completed: false
-
-      });
-
-
-      saveTasks();
-
-      renderTasks();
-
-
-      input.value =
-        '';
-
-      input.focus();
-
-    }
-
-
-    /* ENTER = ADD TASK */
-
-    document
-      .getElementById(
-        'taskInput'
-      )
-      .addEventListener(
-        'keydown',
-        function (event) {
-
-          if (
-            event.key === 'Enter'
-          ) {
-
-            event.preventDefault();
-
-            addTask();
-
-          }
-
-        }
-      );
-
-
-    /* INITIAL RENDER */
-
-    renderTasks();
-
-  </script>
-
+  <div class="tasks-section">
+    <div class="tasks-title">Задачи</div>
+    <div class="task-input-row">
+      <input id="taskInput" class="task-input" type="text" placeholder="Например: скачать драйвер" autocomplete="off">
+      <button class="add-task" onclick="addTask()">+ Добавить</button>
+    </div>
+    <ul id="taskList" class="task-list"></ul>
+  </div>
+</div>
+
+</div>
+</div>
+
+<div class="signature">By Tsoykkk</div>
+
+<script>
+const notes=['','',''],tasks=[[],[],[]];let currentNote=0;
+
+function updateClock(){
+  const n=new Date();
+  clock.textContent=n.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  date.textContent=n.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+updateClock();setInterval(updateClock,1000);
+
+for(let i=0;i<3;i++){
+  notes[i]=localStorage.getItem('personalHubNote_'+i)||'';
+  try{tasks[i]=JSON.parse(localStorage.getItem('personalHubTasks_'+i)||'[]')}catch{tasks[i]=[]}
+}
+noteEditor.value=notes[0];
+
+function switchNote(i){
+  notes[currentNote]=noteEditor.value;
+  localStorage.setItem('personalHubNote_'+currentNote,noteEditor.value);
+  currentNote=i;
+  noteEditor.value=notes[i];
+  document.querySelectorAll('.note-tab').forEach((t,n)=>t.classList.toggle('active',n===i));
+  renderTasks();
+  noteStatus.textContent='Блокнот переключён';
+}
+
+noteEditor.oninput=()=>{
+  notes[currentNote]=noteEditor.value;
+  localStorage.setItem('personalHubNote_'+currentNote,noteEditor.value);
+  noteStatus.textContent='Сохранено';
+  clearTimeout(window.saveTimer);
+  window.saveTimer=setTimeout(()=>noteStatus.textContent='Сохраняется автоматически',1200);
+};
+
+function clearCurrentNote(){
+  if(!confirm('Очистить этот блокнот?'))return;
+  noteEditor.value=notes[currentNote]='';
+  localStorage.removeItem('personalHubNote_'+currentNote);
+  noteStatus.textContent='Блокнот очищен';
+}
+
+function saveTasks(){
+  localStorage.setItem('personalHubTasks_'+currentNote,JSON.stringify(tasks[currentNote]));
+}
+
+function renderTasks(){
+  taskList.innerHTML='';
+  if(!tasks[currentNote].length){
+    taskList.innerHTML='<li class="empty-tasks">Задач пока нет</li>';
+    updateTaskIndicator();
+    return;
+  }
+
+  tasks[currentNote].forEach((task,i)=>{
+    const li=document.createElement('li');
+    li.className='task-item'+(task.completed?' completed':'');
+    const cb=document.createElement('input');
+    cb.type='checkbox';cb.className='task-checkbox';cb.checked=task.completed;
+    cb.onchange=()=>{task.completed=cb.checked;saveTasks();renderTasks()};
+    const text=document.createElement('span');
+    text.className='task-text';text.textContent=task.text;
+    const del=document.createElement('button');
+    del.className='delete-task';del.textContent='×';del.title='Удалить задачу';
+    del.onclick=()=>{tasks[currentNote].splice(i,1);saveTasks();renderTasks()};
+    li.append(cb,text,del);taskList.appendChild(li);
+  });
+  updateTaskIndicator();
+}
+
+function addTask(){
+  const text=taskInput.value.trim();
+  if(!text)return;
+  tasks[currentNote].push({text,completed:false});
+  saveTasks();renderTasks();taskInput.value='';taskInput.focus();
+}
+
+taskInput.onkeydown=e=>{
+  if(e.key==='Enter'){e.preventDefault();addTask()}
+};
+
+function updateTaskIndicator(){
+  const n=tasks[currentNote].filter(t=>!t.completed).length;
+  taskIndicator.classList.toggle('all-done',n===0);
+  indicatorIcon.textContent=n?'🔔':'✓';
+  indicatorText.textContent=n?(n===1?'Незавершённая задача':'Незавершённые задачи'):'Все задачи выполнены';
+  indicatorCount.textContent=n;
+  indicatorCount.style.display=n?'inline-flex':'none';
+}
+
+function scrollToTasks(){
+  notesCard.scrollIntoView({behavior:'smooth',block:'start'});
+  setTimeout(()=>taskInput.focus(),500);
+}
+
+renderTasks();
+</script>
 </body>
 </html>
-

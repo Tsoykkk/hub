@@ -7,94 +7,126 @@
   <style>
     :root {
       --text: #ffffff;
-      --text-dim: rgba(255, 255, 255, 0.7);
-      --accent: #fff;
+      --text-dim: rgba(255, 255, 255, 0.65);
+      --accent: #38bdf8;
       
-      /* Эффект матового стекла */
-      --glass-bg: rgba(255, 255, 255, 0.06);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --glass-blur: blur(15px);
+      /* Glassmorphism */
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --item-bg: rgba(255, 255, 255, 0.04);
+      --item-hover: rgba(255, 255, 255, 0.1);
       
-      /* Кнопки скачивания софта */
-      --download-bg: rgba(0, 255, 179, 0.15);
-      --download-text: #00ffb3;
-      --download-hover: rgba(0, 255, 179, 0.3);
+      /* Кнопки софта и загрузок */
+      --download-bg: rgba(16, 185, 129, 0.15);
+      --download-border: rgba(16, 185, 129, 0.35);
+      --download-text: #34d399;
+      --download-hover: rgba(16, 185, 129, 0.3);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     
     body { 
-      background-color: #0d1117;
-      background-image: url('https://images.unsplash.com/photo-1599672124560-ebf1d7d020d5?q=80&w=2560&auto=format&fit=crop');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      color: var(--text); 
+      min-height: 100vh;
       display: flex; 
       justify-content: center; 
-      min-height: 100vh;
+      align-items: flex-start;
       padding: 60px 20px;
+      color: var(--text);
+      background-color: #0b0f19;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.8) 0px, transparent 100%);
+      background-attachment: fixed;
     }
 
-    .container { width: 100%; max-width: 1060px; }
+    .container { width: 100%; max-width: 1200px; }
 
     /* Поисковая строка */
-    .search-box { margin-bottom: 45px; }
-    .search-form { display: flex; width: 100%; justify-content: center; }
+    .search-box { margin-bottom: 45px; display: flex; justify-content: center; }
+    .search-form { width: 100%; max-width: 580px; }
     .search-input {
-      width: 100%; max-width: 600px; padding: 16px 22px; font-size: 16px; 
-      border-radius: 50px;
+      width: 100%; padding: 16px 24px; font-size: 15px; 
+      border-radius: 9999px;
       border: 1px solid var(--glass-border); 
-      background: var(--glass-bg); 
-      backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-      color: var(--text); outline: none; transition: 0.3s;
+      background: rgba(255, 255, 255, 0.05); 
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      color: var(--text); outline: none; transition: all 0.25s ease;
       text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
     }
-    .search-input:focus { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.1); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+    .search-input:focus { 
+      border-color: rgba(56, 189, 248, 0.5); 
+      background: rgba(255, 255, 255, 0.08); 
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+    }
     .search-input::placeholder { color: var(--text-dim); }
 
     /* Сетка */
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
     
-    /* Карточка (Glassmorphism) */
+    /* Карточки */
     .card { 
       background: var(--glass-bg); 
-      backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--glass-border); 
       border-radius: 20px; 
-      padding: 25px; 
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      padding: 22px; 
+      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+      transition: transform 0.25s ease, border-color 0.25s ease;
     }
-    .card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .card:hover { 
+      transform: translateY(-4px); 
+      border-color: rgba(255, 255, 255, 0.25); 
+    }
 
-    .card-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 18px; text-align: center; }
+    .card-title { 
+      font-size: 13px; font-weight: 700; text-transform: uppercase; 
+      letter-spacing: 0.12em; color: var(--text-dim); margin-bottom: 18px; text-align: center; 
+    }
 
-    /* Список ссылок */
-    .link-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    /* Ссылки */
+    .link-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
     
     .link-item a {
       display: flex; align-items: center; justify-content: space-between; text-decoration: none;
-      color: var(--text); padding: 12px 16px; border-radius: 10px; 
-      background: rgba(255, 255, 255, 0.03); 
-      transition: 0.2s; font-size: 15px; border: 1px solid transparent;
+      color: var(--text); padding: 11px 15px; border-radius: 12px; 
+      background: var(--item-bg); 
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease; font-size: 14px;
     }
-    .link-item a:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255,255,255,0.1); color: #fff; transform: translateX(3px); }
+    .link-item a:hover { 
+      background: var(--item-hover); 
+      border-color: rgba(255, 255, 255, 0.18); 
+      color: #fff; 
+      transform: translateX(4px); 
+    }
 
-    /* Софт */
+    /* Кнопки скачивания */
     .download-link a {
-      background: var(--download-bg); border-color: transparent; color: var(--download-text); font-weight: 600;
+      background: var(--download-bg); 
+      border-color: var(--download-border); 
+      color: var(--download-text); 
+      font-weight: 600;
     }
-    .download-link a:hover { background: var(--download-hover); border-color: var(--download-text); color: #fff; transform: none; }
-    .badge { font-size: 11px; padding: 3px 7px; border-radius: 6px; background: rgba(0,0,0,0.3); color: var(--text-dim); }
-    .download-link a:hover .badge { background: #fff; color: #000; }
+    .download-link a:hover { 
+      background: var(--download-hover); 
+      border-color: #34d399; 
+      color: #fff; 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.2);
+    }
+    .badge { 
+      font-size: 11px; padding: 2px 7px; border-radius: 6px; 
+      background: rgba(0, 0, 0, 0.35); color: var(--text-dim); 
+    }
+    .download-link a:hover .badge { background: #34d399; color: #042f1a; font-weight: 700; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- Поиск -->
+  <!-- Строка поиска -->
   <div class="search-box">
     <form class="search-form" action="https://www.google.com/search" method="get">
       <input class="search-input" type="text" name="q" placeholder="Поиск в Интернете..." autofocus autocomplete="off">
@@ -102,7 +134,7 @@
   </div>
 
   <div class="grid">
-    <!-- Блок: Главное -->
+    <!-- Главное и Инструменты -->
     <div class="card">
       <div class="card-title">Главное</div>
       <ul class="link-list">
@@ -110,40 +142,106 @@
         <li class="link-item"><a href="https://vk.com" target="_blank">VK</a></li>
         <li class="link-item"><a href="https://web.telegram.org" target="_blank">Telegram Web</a></li>
         <li class="link-item"><a href="https://mail.google.com" target="_blank">Gmail</a></li>
-      </ul>
-    </div>
-
-    <!-- Блок: Инструменты -->
-    <div class="card">
-      <div class="card-title">Инструменты</div>
-      <ul class="link-list">
         <li class="link-item"><a href="https://github.com/Tsoykkk" target="_blank">Мой GitHub</a></li>
         <li class="link-item"><a href="https://drive.google.com" target="_blank">Google Drive</a></li>
       </ul>
     </div>
 
-    <!-- Блок: Установка / Софт -->
+    <!-- Рабочий софт -->
     <div class="card">
-      <div class="card-title">Установка / Софт</div>
+      <div class="card-title">Рабочий софт</div>
       <ul class="link-list">
-        <!-- Рабочий клиент с Google Диска -->
+        <!-- Зашифрованный архив Connect Setup с личного GDrive -->
         <li class="link-item download-link">
           <a href="https://drive.google.com/uc?export=download&id=1R4qS6nf7E6yvOklN5qPHYmJEugviinTW" target="_blank">
-            Рабочий клиент <span class="badge">.rar</span>
+            Connect Setup <span class="badge">.rar</span>
           </a>
         </li>
+        <!-- Omnissa / VMware Horizon Client -->
+        <li class="link-item download-link">
+          <a href="https://customerconnect.vmware.com/en/downloads/info/slug/desktop_end_user_computing/vmware_horizon_clients/horizon_8#win64" target="_blank">
+            Horizon Client <span class="badge">portal</span>
+          </a>
+        </li>
+      </ul>
+    </div>
 
-        <!-- Telegram Desktop с вашего Google Диска -->
+    <!-- Игры и Драйверы -->
+    <div class="card">
+      <div class="card-title">Игры и Драйверы</div>
+      <ul class="link-list">
+        <li class="link-item download-link">
+          <a href="https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe" target="_blank">
+            Steam <span class="badge">.exe</span>
+          </a>
+        </li>
+        <li class="link-item download-link">
+          <a href="https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi" target="_blank">
+            Epic Games <span class="badge">.msi</span>
+          </a>
+        </li>
+        <li class="link-item download-link">
+          <a href="https://us.download.nvidia.com/GFE/GFEClient/3.28.0.417/GeForce_Experience_v3.28.0.417.exe" target="_blank">
+            GeForce Experience <span class="badge">.exe</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Софт и Система -->
+    <div class="card">
+      <div class="card-title">Софт и Система</div>
+      <ul class="link-list">
+        <li class="link-item download-link">
+          <a href="https://dl.google.com/tag/s/appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26iid%3D%7B8E5F7065-C2B1-F7BC-EF74-9C1D9F15F057%7D%26lang%3Dru%26browser%3D4%26usagestats%3D0%26appname%3DGoogle%2520Chrome%26needsadmin%3Dprefers%26ap%3Dx64-stable-statsdef_1/chrome/install/ChromeStandaloneSetup64.exe" target="_blank">
+            Google Chrome <span class="badge">.exe</span>
+          </a>
+        </li>
         <li class="link-item download-link">
           <a href="https://drive.google.com/uc?export=download&id=1NZCrzRdn3aOfpjHfYUbQN7s8FYKEZDlV" target="_blank">
             Telegram Desktop <span class="badge">.exe</span>
           </a>
         </li>
-
-        <!-- 7-Zip -->
+        <li class="link-item download-link">
+          <a href="https://sourceforge.net/projects/qbittorrent/files/latest/download" target="_blank">
+            qBittorrent <span class="badge">.exe</span>
+          </a>
+        </li>
+        <li class="link-item download-link">
+          <a href="https://get.videolan.org/vlc/last/win64/vlc-3.0.21-win64.exe" target="_blank">
+            VLC Player <span class="badge">.exe</span>
+          </a>
+        </li>
+        <li class="link-item download-link">
+          <a href="https://www.rarlab.com/rar/winrar-x64-700.exe" target="_blank">
+            WinRAR x64 <span class="badge">.exe</span>
+          </a>
+        </li>
         <li class="link-item download-link">
           <a href="https://www.7-zip.org/a/7z2408-x64.exe" target="_blank">
-            7-Zip Installer <span class="badge">.exe</span>
+            7-Zip <span class="badge">.exe</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Обход / Сеть -->
+    <div class="card">
+      <div class="card-title">Обход / Сеть</div>
+      <ul class="link-list">
+        <li class="link-item download-link">
+          <a href="https://github.com/Flowseal/zapret-discord-youtube/releases/latest/download/zapret-discord-youtube.zip" target="_blank">
+            Zapret Discord/YT <span class="badge">.zip</span>
+          </a>
+        </li>
+        <li class="link-item download-link">
+          <a href="https://github.com/Flowseal/tg-ws-proxy/releases/latest/download/TgWsProxy_windows.exe" target="_blank">
+            TG WS Proxy <span class="badge">.exe</span>
+          </a>
+        </li>
+        <li class="link-item download-link">
+          <a href="https://github.com/Takeh1ko/GeoFree/archive/refs/heads/main.zip" target="_blank">
+            GeoFree AI <span class="badge">.zip</span>
           </a>
         </li>
       </ul>

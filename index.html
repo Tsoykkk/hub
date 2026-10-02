@@ -1,253 +1,1110 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Personal Hub</title>
+
+  <link rel="icon" href="data:image/svg+xml,
+  <svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22>
+    <text y=%22.9em%22 font-size=%2290%22>🌐</text>
+  </svg>">
+
   <style>
     :root {
       --text: #ffffff;
       --text-dim: rgba(255, 255, 255, 0.65);
       --accent: #38bdf8;
-      
-      /* Glassmorphism */
+
       --glass-bg: rgba(255, 255, 255, 0.05);
       --glass-border: rgba(255, 255, 255, 0.12);
+
       --item-bg: rgba(255, 255, 255, 0.04);
-      --item-hover: rgba(255, 255, 255, 0.1);
-      
-      /* Кнопки софта и загрузок */
+      --item-hover: rgba(255, 255, 255, 0.10);
+
       --download-bg: rgba(16, 185, 129, 0.15);
       --download-border: rgba(16, 185, 129, 0.35);
       --download-text: #34d399;
-      --download-hover: rgba(16, 185, 129, 0.3);
+      --download-hover: rgba(16, 185, 129, 0.30);
+
+      --danger: #fb7185;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    
-    body { 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
       min-height: 100vh;
-      display: flex; 
-      justify-content: center; 
-      align-items: flex-start;
-      padding: 60px 20px;
+      padding: 40px 20px 60px;
       color: var(--text);
+
       background-color: #0b0f19;
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.8) 0px, transparent 100%);
+
+      background-image:
+        radial-gradient(
+          at 0% 0%,
+          rgba(56, 189, 248, 0.15) 0px,
+          transparent 50%
+        ),
+        radial-gradient(
+          at 100% 100%,
+          rgba(139, 92, 246, 0.15) 0px,
+          transparent 50%
+        ),
+        radial-gradient(
+          at 50% 50%,
+          rgba(15, 23, 42, 0.8) 0px,
+          transparent 100%
+        );
+
       background-attachment: fixed;
     }
 
-    .container { width: 100%; max-width: 1200px; }
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-    /* Поисковая строка */
-    .search-box { margin-bottom: 45px; display: flex; justify-content: center; }
-    .search-form { width: 100%; max-width: 580px; }
-    .search-input {
-      width: 100%; padding: 16px 24px; font-size: 15px; 
-      border-radius: 9999px;
-      border: 1px solid var(--glass-border); 
-      background: rgba(255, 255, 255, 0.05); 
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      color: var(--text); outline: none; transition: all 0.25s ease;
+    /* =========================
+       ШАПКА
+       ========================= */
+
+    .header {
       text-align: center;
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-    }
-    .search-input:focus { 
-      border-color: rgba(56, 189, 248, 0.5); 
-      background: rgba(255, 255, 255, 0.08); 
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
-    }
-    .search-input::placeholder { color: var(--text-dim); }
-
-    /* Сетка */
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-    
-    /* Карточки */
-    .card { 
-      background: var(--glass-bg); 
-      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-      border: 1px solid var(--glass-border); 
-      border-radius: 20px; 
-      padding: 22px; 
-      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
-      transition: transform 0.25s ease, border-color 0.25s ease;
-    }
-    .card:hover { 
-      transform: translateY(-4px); 
-      border-color: rgba(255, 255, 255, 0.25); 
+      margin-bottom: 35px;
     }
 
-    .card-title { 
-      font-size: 13px; font-weight: 700; text-transform: uppercase; 
-      letter-spacing: 0.12em; color: var(--text-dim); margin-bottom: 18px; text-align: center; 
+    .logo {
+      font-size: 28px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.25));
     }
 
-    /* Ссылки */
-    .link-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
-    
+    .clock {
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+
+    .date {
+      margin-top: 10px;
+      color: var(--text-dim);
+      font-size: 14px;
+      text-transform: capitalize;
+    }
+
+    /* =========================
+       ПОИСК
+       ========================= */
+
+    .search-box {
+      margin-bottom: 35px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-form {
+      width: 100%;
+      max-width: 580px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 16px 24px;
+
+      font-size: 15px;
+      text-align: center;
+
+      border-radius: 9999px;
+      border: 1px solid var(--glass-border);
+
+      background: rgba(255, 255, 255, 0.05);
+
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+
+      color: var(--text);
+      outline: none;
+
+      transition: all 0.25s ease;
+
+      box-shadow:
+        0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .search-input:focus {
+      border-color: rgba(56, 189, 248, 0.5);
+
+      background: rgba(255, 255, 255, 0.08);
+
+      box-shadow:
+        0 0 25px rgba(56, 189, 248, 0.25);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    /* =========================
+       КАРТОЧКИ
+       ========================= */
+
+    .grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(auto-fit, minmax(280px, 1fr));
+
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--glass-bg);
+
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+
+      border: 1px solid var(--glass-border);
+
+      border-radius: 20px;
+
+      padding: 22px;
+
+      box-shadow:
+        0 20px 40px -15px rgba(0, 0, 0, 0.5);
+
+      transition:
+        transform 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+
+      border-color:
+        rgba(255, 255, 255, 0.25);
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+
+      color: var(--text-dim);
+
+      margin-bottom: 18px;
+
+      text-align: center;
+    }
+
+    /* =========================
+       ССЫЛКИ
+       ========================= */
+
+    .link-list {
+      list-style: none;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 9px;
+    }
+
     .link-item a {
-      display: flex; align-items: center; justify-content: space-between; text-decoration: none;
-      color: var(--text); padding: 11px 15px; border-radius: 12px; 
-      background: var(--item-bg); 
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.2s ease; font-size: 14px;
-    }
-    .link-item a:hover { 
-      background: var(--item-hover); 
-      border-color: rgba(255, 255, 255, 0.18); 
-      color: #fff; 
-      transform: translateX(4px); 
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      text-decoration: none;
+
+      color: var(--text);
+
+      padding: 11px 15px;
+
+      border-radius: 12px;
+
+      background: var(--item-bg);
+
+      border:
+        1px solid rgba(255, 255, 255, 0.05);
+
+      transition: all 0.2s ease;
+
+      font-size: 14px;
     }
 
-    /* Кнопки скачивания */
+    .link-item a:hover {
+      background: var(--item-hover);
+
+      border-color:
+        rgba(255, 255, 255, 0.18);
+
+      color: #fff;
+
+      transform: translateX(4px);
+    }
+
+    /* =========================
+       DOWNLOAD
+       ========================= */
+
     .download-link a {
-      background: var(--download-bg); 
-      border-color: var(--download-border); 
-      color: var(--download-text); 
+      background: var(--download-bg);
+
+      border-color: var(--download-border);
+
+      color: var(--download-text);
+
       font-weight: 600;
     }
-    .download-link a:hover { 
-      background: var(--download-hover); 
-      border-color: #34d399; 
-      color: #fff; 
+
+    .download-link a:hover {
+      background: var(--download-hover);
+
+      border-color: #34d399;
+
+      color: #fff;
+
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.2);
+
+      box-shadow:
+        0 6px 20px rgba(16, 185, 129, 0.2);
     }
-    .badge { 
-      font-size: 11px; padding: 2px 7px; border-radius: 6px; 
-      background: rgba(0, 0, 0, 0.35); color: var(--text-dim); 
+
+    .badge {
+      font-size: 11px;
+
+      padding: 2px 7px;
+
+      border-radius: 6px;
+
+      background:
+        rgba(0, 0, 0, 0.35);
+
+      color: var(--text-dim);
     }
-    .download-link a:hover .badge { background: #34d399; color: #042f1a; font-weight: 700; }
+
+    .download-link a:hover .badge {
+      background: #34d399;
+
+      color: #042f1a;
+
+      font-weight: 700;
+    }
+
+    /* =========================
+       БЛОКНОТЫ
+       ========================= */
+
+    .notes-card {
+      grid-column: 1 / -1;
+    }
+
+    .notes-tabs {
+      display: flex;
+      gap: 8px;
+
+      margin-bottom: 12px;
+
+      flex-wrap: wrap;
+    }
+
+    .note-tab {
+      border: 1px solid var(--glass-border);
+
+      background: var(--item-bg);
+
+      color: var(--text-dim);
+
+      padding: 8px 12px;
+
+      border-radius: 10px;
+
+      cursor: pointer;
+
+      font-size: 13px;
+
+      transition: all 0.2s ease;
+    }
+
+    .note-tab:hover {
+      background: var(--item-hover);
+      color: #fff;
+    }
+
+    .note-tab.active {
+      background:
+        rgba(56, 189, 248, 0.15);
+
+      border-color:
+        rgba(56, 189, 248, 0.4);
+
+      color: #7dd3fc;
+    }
+
+    .note-editor {
+      width: 100%;
+
+      min-height: 220px;
+
+      resize: vertical;
+
+      padding: 16px;
+
+      border-radius: 14px;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+      background:
+        rgba(0, 0, 0, 0.18);
+
+      color: #fff;
+
+      outline: none;
+
+      font-size: 14px;
+
+      line-height: 1.6;
+    }
+
+    .note-editor:focus {
+      border-color:
+        rgba(56, 189, 248, 0.4);
+    }
+
+    .notes-bottom {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      margin-top: 10px;
+
+      gap: 10px;
+    }
+
+    .note-status {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .clear-note {
+      border: 1px solid rgba(251, 113, 133, 0.3);
+
+      background:
+        rgba(251, 113, 133, 0.08);
+
+      color: #fda4af;
+
+      padding: 7px 11px;
+
+      border-radius: 9px;
+
+      cursor: pointer;
+
+      font-size: 12px;
+    }
+
+    .clear-note:hover {
+      background:
+        rgba(251, 113, 133, 0.16);
+    }
+
+    /* =========================
+       АДАПТИВ
+       ========================= */
+
+    @media (max-width: 600px) {
+      body {
+        padding: 25px 14px 40px;
+      }
+
+      .clock {
+        font-size: 34px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
+
 <body>
 
 <div class="container">
-  <!-- Строка поиска -->
+
+  <!-- =========================
+       ШАПКА
+       ========================= -->
+
+  <header class="header">
+
+    <div class="logo">🌐</div>
+
+    <div class="clock" id="clock">
+      00:00:00
+    </div>
+
+    <div class="date" id="date">
+      Загрузка...
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       ПОИСК
+       ========================= -->
+
   <div class="search-box">
-    <form class="search-form" action="https://www.google.com/search" method="get">
-      <input class="search-input" type="text" name="q" placeholder="Поиск в Интернете..." autofocus autocomplete="off">
+
+    <form
+      class="search-form"
+      action="https://www.google.com/search"
+      method="get"
+    >
+
+      <input
+        class="search-input"
+        type="text"
+        name="q"
+        placeholder="Поиск в Интернете..."
+        autofocus
+        autocomplete="off"
+      >
+
     </form>
+
   </div>
+
+
+  <!-- =========================
+       ОСНОВНАЯ СЕТКА
+       ========================= -->
 
   <div class="grid">
-    <!-- Главное и Инструменты -->
+
+
+    <!-- ГЛАВНОЕ -->
+
     <div class="card">
-      <div class="card-title">Главное</div>
+
+      <div class="card-title">
+        Главное
+      </div>
+
       <ul class="link-list">
-        <li class="link-item"><a href="https://youtube.com" target="_blank">YouTube</a></li>
-        <li class="link-item"><a href="https://vk.com" target="_blank">VK</a></li>
-        <li class="link-item"><a href="https://web.telegram.org" target="_blank">Telegram Web</a></li>
-        <li class="link-item"><a href="https://mail.google.com" target="_blank">Gmail</a></li>
-        <li class="link-item"><a href="https://github.com/Tsoykkk" target="_blank">Мой GitHub</a></li>
-        <li class="link-item"><a href="https://drive.google.com" target="_blank">Google Drive</a></li>
+
+        <li class="link-item">
+          <a
+            href="https://youtube.com"
+            target="_blank"
+          >
+            YouTube
+          </a>
+        </li>
+
+        <li class="link-item">
+          <a
+            href="https://vk.com"
+            target="_blank"
+          >
+            VK
+          </a>
+        </li>
+
+        <li class="link-item">
+          <a
+            href="https://web.telegram.org"
+            target="_blank"
+          >
+            Telegram Web
+          </a>
+        </li>
+
+        <li class="link-item">
+          <a
+            href="https://mail.google.com"
+            target="_blank"
+          >
+            Gmail
+          </a>
+        </li>
+
+        <li class="link-item">
+          <a
+            href="https://github.com/Tsoykkk"
+            target="_blank"
+          >
+            Мой GitHub
+          </a>
+        </li>
+
+        <li class="link-item">
+          <a
+            href="https://drive.google.com"
+            target="_blank"
+          >
+            Google Drive
+          </a>
+        </li>
+
       </ul>
+
     </div>
 
-    <!-- Рабочий софт -->
+
+    <!-- РАБОЧИЙ СОФТ -->
+
     <div class="card">
-      <div class="card-title">Рабочий софт</div>
+
+      <div class="card-title">
+        Рабочий софт
+      </div>
+
       <ul class="link-list">
-        <!-- Зашифрованный архив Connect Setup с личного GDrive -->
+
         <li class="link-item download-link">
-          <a href="https://drive.google.com/uc?export=download&id=1R4qS6nf7E6yvOklN5qPHYmJEugviinTW" target="_blank">
-            Connect Setup <span class="badge">.rar</span>
+
+          <a
+            href="https://drive.google.com/uc?export=download&id=1854PH1qpLl9852mbHODo_ET6wtMNNWh5"
+            target="_blank"
+          >
+            Connect Setup
+
+            <span class="badge">
+              .rar
+            </span>
+
           </a>
+
         </li>
-        <!-- Omnissa / VMware Horizon Client -->
+
+
         <li class="link-item download-link">
-          <a href="https://customerconnect.vmware.com/en/downloads/info/slug/desktop_end_user_computing/vmware_horizon_clients/horizon_8#win64" target="_blank">
-            Horizon Client <span class="badge">portal</span>
+
+          <a
+            href="https://customerconnect.vmware.com/en/downloads/info/slug/desktop_end_user_computing/vmware_horizon_clients/horizon_8#win64"
+            target="_blank"
+          >
+            Horizon Client
+
+            <span class="badge">
+              portal
+            </span>
+
           </a>
+
         </li>
+
       </ul>
+
     </div>
 
-    <!-- Игры и Драйверы -->
+
+    <!-- ИГРЫ И ДРАЙВЕРЫ -->
+
     <div class="card">
-      <div class="card-title">Игры и Драйверы</div>
+
+      <div class="card-title">
+        Игры и Драйверы
+      </div>
+
       <ul class="link-list">
+
         <li class="link-item download-link">
-          <a href="https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe" target="_blank">
-            Steam <span class="badge">.exe</span>
+
+          <a
+            href="https://store.steampowered.com/about/"
+            target="_blank"
+          >
+            Steam
+
+            <span class="badge">
+              download
+            </span>
+
           </a>
+
         </li>
+
+
         <li class="link-item download-link">
-          <a href="https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi" target="_blank">
-            Epic Games <span class="badge">.msi</span>
+
+          <a
+            href="https://store.epicgames.com/en-US/download"
+            target="_blank"
+          >
+            Epic Games
+
+            <span class="badge">
+              download
+            </span>
+
           </a>
+
         </li>
+
+
         <li class="link-item download-link">
-          <a href="https://us.download.nvidia.com/GFE/GFEClient/3.28.0.417/GeForce_Experience_v3.28.0.417.exe" target="_blank">
-            GeForce Experience <span class="badge">.exe</span>
+
+          <a
+            href="https://www.nvidia.com/en-us/software/nvidia-app/"
+            target="_blank"
+          >
+            NVIDIA App
+
+            <span class="badge">
+              download
+            </span>
+
           </a>
+
         </li>
+
       </ul>
+
     </div>
 
-    <!-- Софт и Система -->
+
+    <!-- СОФТ И СИСТЕМА -->
+
     <div class="card">
-      <div class="card-title">Софт и Система</div>
+
+      <div class="card-title">
+        Софт и Система
+      </div>
+
       <ul class="link-list">
+
+
         <li class="link-item download-link">
-          <a href="https://dl.google.com/tag/s/appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26iid%3D%7B8E5F7065-C2B1-F7BC-EF74-9C1D9F15F057%7D%26lang%3Dru%26browser%3D4%26usagestats%3D0%26appname%3DGoogle%2520Chrome%26needsadmin%3Dprefers%26ap%3Dx64-stable-statsdef_1/chrome/install/ChromeStandaloneSetup64.exe" target="_blank">
-            Google Chrome <span class="badge">.exe</span>
+
+          <a
+            href="https://www.google.com/chrome/"
+            target="_blank"
+          >
+            Google Chrome
+
+            <span class="badge">
+              download
+            </span>
+
           </a>
+
         </li>
+
+
         <li class="link-item download-link">
-          <a href="https://drive.google.com/uc?export=download&id=1NZCrzRdn3aOfpjHfYUbQN7s8FYKEZDlV" target="_blank">
-            Telegram Desktop <span class="badge">.exe</span>
+
+          <a
+            href="https://drive.google.com/uc?export=download&id=1NZCrzRdn3aOfpjHfYUbQN7s8FYKEZDlV"
+            target="_blank"
+          >
+            Telegram Desktop
+
+            <span class="badge">
+              .exe
+            </span>
+
           </a>
+
         </li>
+
+
         <li class="link-item download-link">
-          <a href="https://sourceforge.net/projects/qbittorrent/files/latest/download" target="_blank">
-            qBittorrent <span class="badge">.exe</span>
+
+          <a
+            href="https://www.qbittorrent.org/download"
+            target="_blank"
+          >
+            qBittorrent
+
+            <span class="badge">
+              download
+            </span>
+
           </a>
+
         </li>
+
+
         <li class="link-item download-link">
-          <a href="https://get.videolan.org/vlc/last/win64/vlc-3.0.21-win64.exe" target="_blank">
-            VLC Player <span class="badge">.exe</span>
+
+          <a
+            href="https://www.videolan.org/vlc/"
+            target="_blank"
+          >
+            VLC Player
+
+            <span class="badge">
+              download
+            </span>
+
           </a>
+
         </li>
+
+
         <li class="link-item download-link">
-          <a href="https://www.rarlab.com/rar/winrar-x64-700.exe" target="_blank">
-            WinRAR x64 <span class="badge">.exe</span>
+
+          <a
+            href="https://www.rarlab.com/download.htm"
+            target="_blank"
+          >
+            WinRAR x64
+
+            <span class="badge">
+              download
+            </span>
+
           </a>
+
         </li>
+
+
         <li class="link-item download-link">
-          <a href="https://www.7-zip.org/a/7z2408-x64.exe" target="_blank">
-            7-Zip <span class="badge">.exe</span>
+
+          <a
+            href="https://www.7-zip.org/download.html"
+            target="_blank"
+          >
+            7-Zip
+
+            <span class="badge">
+              download
+            </span>
+
           </a>
+
         </li>
+
       </ul>
+
     </div>
 
-    <!-- Обход / Сеть -->
+
+    <!-- ОБХОД / СЕТЬ -->
+
     <div class="card">
-      <div class="card-title">Обход / Сеть</div>
+
+      <div class="card-title">
+        Обход / Сеть
+      </div>
+
       <ul class="link-list">
+
+
         <li class="link-item download-link">
-          <a href="https://github.com/Flowseal/zapret-discord-youtube/releases/latest/download/zapret-discord-youtube.zip" target="_blank">
-            Zapret Discord/YT <span class="badge">.zip</span>
+
+          <a
+            href="https://github.com/Flowseal/zapret-discord-youtube/releases"
+            target="_blank"
+          >
+            Zapret Discord/YT
+
+            <span class="badge">
+              releases
+            </span>
+
           </a>
+
         </li>
+
+
         <li class="link-item download-link">
-          <a href="https://github.com/Flowseal/tg-ws-proxy/releases/latest/download/TgWsProxy_windows.exe" target="_blank">
-            TG WS Proxy <span class="badge">.exe</span>
+
+          <a
+            href="https://github.com/Flowseal/tg-ws-proxy/releases"
+            target="_blank"
+          >
+            TG WS Proxy
+
+            <span class="badge">
+              releases
+            </span>
+
           </a>
+
         </li>
+
+
         <li class="link-item download-link">
-          <a href="https://github.com/Takeh1ko/GeoFree/archive/refs/heads/main.zip" target="_blank">
-            GeoFree AI <span class="badge">.zip</span>
+
+          <a
+            href="https://github.com/Takeh1ko/GeoFree"
+            target="_blank"
+          >
+            GeoFree AI
+
+            <span class="badge">
+              GitHub
+            </span>
+
           </a>
+
         </li>
+
       </ul>
+
     </div>
+
+
+    <!-- =========================
+         БЛОКНОТЫ
+         ========================= -->
+
+    <div class="card notes-card">
+
+      <div class="card-title">
+        Блокноты
+      </div>
+
+
+      <div class="notes-tabs">
+
+        <button
+          class="note-tab active"
+          onclick="switchNote(0)"
+        >
+          Личное
+        </button>
+
+        <button
+          class="note-tab"
+          onclick="switchNote(1)"
+        >
+          Работа
+        </button>
+
+        <button
+          class="note-tab"
+          onclick="switchNote(2)"
+        >
+          Идеи
+        </button>
+
+      </div>
+
+
+      <textarea
+        id="noteEditor"
+        class="note-editor"
+        placeholder="Пиши здесь..."
+      ></textarea>
+
+
+      <div class="notes-bottom">
+
+        <span
+          class="note-status"
+          id="noteStatus"
+        >
+          Сохраняется автоматически
+        </span>
+
+
+        <button
+          class="clear-note"
+          onclick="clearCurrentNote()"
+        >
+          Очистить
+        </button>
+
+      </div>
+
+    </div>
+
   </div>
+
 </div>
+
+
+<script>
+
+  /* =========================
+     ЧАСЫ И ДАТА
+     ========================= */
+
+  function updateClock() {
+
+    const now = new Date();
+
+    const time = now.toLocaleTimeString(
+      'ru-RU',
+      {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      }
+    );
+
+    const date = now.toLocaleDateString(
+      'ru-RU',
+      {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }
+    );
+
+    document.getElementById('clock').textContent = time;
+
+    document.getElementById('date').textContent = date;
+  }
+
+
+  updateClock();
+
+  setInterval(updateClock, 1000);
+
+
+  /* =========================
+     БЛОКНОТЫ
+     ========================= */
+
+  const notes = [
+    '',
+    '',
+    ''
+  ];
+
+  let currentNote = 0;
+
+  const editor =
+    document.getElementById('noteEditor');
+
+  const status =
+    document.getElementById('noteStatus');
+
+
+  /* Загружаем сохранённые заметки */
+
+  for (let i = 0; i < notes.length; i++) {
+
+    const saved =
+      localStorage.getItem(
+        'personalHubNote_' + i
+      );
+
+    if (saved !== null) {
+      notes[i] = saved;
+    }
+
+  }
+
+
+  editor.value = notes[currentNote];
+
+
+  function switchNote(index) {
+
+    notes[currentNote] = editor.value;
+
+    localStorage.setItem(
+      'personalHubNote_' + currentNote,
+      editor.value
+    );
+
+
+    currentNote = index;
+
+    editor.value = notes[currentNote];
+
+
+    document
+      .querySelectorAll('.note-tab')
+      .forEach((tab, i) => {
+
+        tab.classList.toggle(
+          'active',
+          i === currentNote
+        );
+
+      });
+
+
+    status.textContent =
+      'Блокнот переключён';
+  }
+
+
+  /* Автосохранение */
+
+  editor.addEventListener(
+    'input',
+    function () {
+
+      notes[currentNote] =
+        editor.value;
+
+      localStorage.setItem(
+        'personalHubNote_' + currentNote,
+        editor.value
+      );
+
+      status.textContent =
+        'Сохранено';
+
+      clearTimeout(
+        window.noteSaveTimer
+      );
+
+      window.noteSaveTimer =
+        setTimeout(() => {
+
+          status.textContent =
+            'Сохраняется автоматически';
+
+        }, 1200);
+
+    }
+  );
+
+
+  /* Очистка текущего блокнота */
+
+  function clearCurrentNote() {
+
+    if (
+      !confirm(
+        'Очистить этот блокнот?'
+      )
+    ) {
+      return;
+    }
+
+
+    editor.value = '';
+
+    notes[currentNote] = '';
+
+    localStorage.removeItem(
+      'personalHubNote_' + currentNote
+    );
+
+
+    status.textContent =
+      'Блокнот очищен';
+  }
+
+</script>
 
 </body>
 </html>
+```

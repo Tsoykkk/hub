@@ -4,54 +4,452 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Personal Hub</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌐%3C/text%3E%3C/svg%3E">
 
 <style>
-:root{--t:#fff;--dim:#ffffffa6;--a:#38bdf8;--bg:#ffffff0d;--br:#ffffff1f;--item:#ffffff0a}
-*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-body{min-height:100vh;padding:40px 20px 60px;color:var(--t);background:#0b0f19;background-image:radial-gradient(at 0 0,#38bdf826 0,transparent 50%),radial-gradient(at 100% 100%,#8b5cf626 0,transparent 50%),radial-gradient(at 50% 50%,#0f172acc 0,transparent 100%);background-attachment:fixed}
-.container{max-width:1200px;width:100%;margin:auto}
-.header{text-align:center;margin-bottom:35px}.logo{font-size:28px;margin-bottom:8px;filter:drop-shadow(0 0 15px #38bdf840)}
-.clock{font-size:42px;font-weight:700;letter-spacing:.04em;line-height:1}.date{margin-top:10px;color:var(--dim);font-size:14px;text-transform:capitalize}
-.task-indicator{display:inline-flex;align-items:center;gap:8px;margin-top:13px;padding:8px 14px;border:1px solid #38bdf873;border-radius:999px;background:linear-gradient(135deg,#38bdf829,#8b5cf624);color:#bae6fd;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 0 18px #38bdf81f,inset 0 0 15px #ffffff06;backdrop-filter:blur(14px);transition:.2s}
-.task-indicator:hover{transform:translateY(-2px);border-color:#38bdf8bf;background:linear-gradient(135deg,#38bdf83d,#8b5cf633);box-shadow:0 0 25px #38bdf838}
-.indicator-count{min-width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;padding:0 6px;border-radius:999px;background:#38bdf838;color:#7dd3fc;font-size:11px;font-weight:800}
-.task-indicator.all-done{border-color:#34d39959;background:linear-gradient(135deg,#10b98121,#38bdf814);color:#86efac}
-.search-box{margin-bottom:35px;display:flex;justify-content:center}.search-form{width:100%;max-width:580px}
-.search-input{width:100%;padding:16px 24px;font-size:15px;text-align:center;border:1px solid var(--br);border-radius:9999px;background:#ffffff0d;color:var(--t);outline:0;backdrop-filter:blur(20px);box-shadow:0 10px 30px -10px #00000080;transition:.25s}
-.search-input:focus{border-color:#38bdf880;background:#ffffff14;box-shadow:0 0 25px #38bdf840}.search-input::placeholder{color:var(--dim)}
-.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
-.grid>.card:nth-child(1),.grid>.card:nth-child(2),.grid>.card:nth-child(3){grid-column:span 2}
-.grid>.card:nth-child(4),.grid>.card:nth-child(5),.notes-card{grid-column:1/-1}.grid>.card:nth-child(4),.grid>.card:nth-child(5){grid-column:span 3}
-.card{background:var(--bg);backdrop-filter:blur(24px);border:1px solid var(--br);border-radius:20px;padding:22px;box-shadow:0 20px 40px -15px #00000080;transition:.25s}
-.card:hover{transform:translateY(-4px);border-color:#ffffff40}.card-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:18px;text-align:center}
-.link-list,.task-list{list-style:none;display:flex;flex-direction:column;gap:9px}.link-item a{display:flex;align-items:center;justify-content:space-between;text-decoration:none;color:var(--t);padding:11px 15px;border-radius:12px;background:var(--item);border:1px solid #ffffff0d;transition:.2s;font-size:14px}
-.link-item a:hover{background:#ffffff1a;border-color:#ffffff2e;transform:translateX(4px)}
-.download-link a{background:#10b98126;border-color:#10b98159;color:#34d399;font-weight:600}.download-link a:hover{background:#10b9814d;border-color:#34d399;color:#fff;transform:translateY(-2px);box-shadow:0 6px 20px #10b98133}
-.badge{font-size:11px;padding:2px 7px;border-radius:6px;background:#00000059;color:var(--dim)}.download-link a:hover .badge{background:#34d399;color:#042f1a}
-.notes-tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}.note-tab,.clear-note,.add-task{cursor:pointer}
-.note-tab{border:1px solid var(--br);background:var(--item);color:var(--dim);padding:8px 12px;border-radius:10px;font-size:13px;transition:.2s}.note-tab:hover{background:#ffffff1a;color:#fff}.note-tab.active{background:#38bdf826;border-color:#38bdf866;color:#7dd3fc}
-.note-editor{width:100%;min-height:220px;resize:vertical;padding:16px;border:1px solid #ffffff14;border-radius:14px;background:#0000002e;color:#fff;outline:0;font-size:14px;line-height:1.6}.note-editor:focus{border-color:#38bdf866}
-.notes-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px}.note-status{font-size:12px;color:var(--dim)}
-.clear-note{border:1px solid #fb71854d;background:#fb718514;color:#fda4af;padding:7px 11px;border-radius:9px;font-size:12px}.clear-note:hover{background:#fb718529}
-.tasks-section{margin-top:28px;padding-top:22px;border-top:1px solid #ffffff14}.tasks-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:14px;text-align:center}
-.task-input-row{display:flex;gap:9px;margin-bottom:14px}.task-input{flex:1;min-width:0;padding:11px 14px;border:1px solid #ffffff14;border-radius:12px;background:#0000002e;color:#fff;outline:0;font-size:14px}.task-input:focus{border-color:#38bdf866}.task-input::placeholder{color:var(--dim)}
-.add-task{border:1px solid #38bdf859;background:#38bdf81f;color:#7dd3fc;padding:0 16px;border-radius:12px;font-size:13px;font-weight:600;transition:.2s}.add-task:hover{background:#38bdf838;border-color:#38bdf88c;transform:translateY(-1px)}
-.task-item{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:12px;background:var(--item);border:1px solid #ffffff0d}.task-checkbox{width:18px;height:18px;flex-shrink:0;accent-color:var(--a);cursor:pointer}.task-text{flex:1;min-width:0;font-size:14px;word-break:break-word}.task-item.completed .task-text{text-decoration:line-through;color:#ffffff66}
-.delete-task{border:0;background:transparent;color:#ffffff59;cursor:pointer;font-size:16px;padding:3px 5px;border-radius:7px}.delete-task:hover{color:#fb7185;background:#fb71851a}.empty-tasks{text-align:center;color:#ffffff59;font-size:13px;padding:10px 0 4px}
-.signature{position:fixed;right:18px;bottom:14px;color:#ffffff40;font-size:12px;letter-spacing:.04em;pointer-events:none;user-select:none}
-@media(max-width:800px){.grid{grid-template-columns:1fr}.grid>.card,.grid>.card:nth-child(n){grid-column:1/-1!important}}
-@media(max-width:600px){body{padding:25px 14px 40px}.clock{font-size:34px}.task-input-row{flex-direction:column}.add-task{min-height:42px}.signature{right:12px;bottom:9px;font-size:11px}}
+:root{
+  --t:#fff;
+  --dim:#ffffffa6;
+  --a:#38bdf8;
+  --bg:#ffffff0d;
+  --br:#ffffff1f;
+  --item:#ffffff0a;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--t);
+  background:
+    radial-gradient(circle at 15% 10%,#38bdf82a,transparent 28%),
+    radial-gradient(circle at 85% 20%,#8b5cf62a,transparent 30%),
+    #080b12;
+}
+
+.container{
+  width:min(1200px,calc(100% - 32px));
+  margin:0 auto;
+  padding:28px 0 90px;
+}
+
+.header{
+  text-align:center;
+  margin-bottom:24px;
+}
+
+.logo{
+  font-size:34px;
+  margin-bottom:5px;
+}
+
+.clock{
+  font-size:34px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+.date{
+  margin-top:5px;
+  color:var(--dim);
+  font-size:14px;
+  text-transform:capitalize;
+}
+
+.task-indicator{
+  margin-top:9px;
+  border:0;
+  background:transparent;
+  color:#fbbf24;
+  cursor:pointer;
+  font-size:13px;
+  padding:3px 8px;
+  border-radius:8px;
+}
+
+.task-indicator:hover{
+  background:#ffffff0d;
+}
+
+.task-indicator.all-done{
+  color:#4ade80;
+}
+
+.indicator-count{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:19px;
+  height:19px;
+  margin-left:5px;
+  padding:0 5px;
+  border-radius:10px;
+  background:#fbbf2430;
+  font-size:11px;
+}
+
+.search-box{
+  margin-bottom:22px;
+}
+
+.search-form{
+  width:100%;
+}
+
+.search-input{
+  width:100%;
+  padding:15px 18px;
+  border:1px solid var(--br);
+  border-radius:14px;
+  outline:none;
+  background:#ffffff0d;
+  color:#fff;
+  font-size:15px;
+  backdrop-filter:blur(12px);
+}
+
+.search-input::placeholder{
+  color:#ffffff66;
+}
+
+.search-input:focus{
+  border-color:#38bdf866;
+  box-shadow:0 0 0 3px #38bdf814;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:16px;
+}
+
+.card{
+  grid-column:span 2;
+  padding:18px;
+  border:1px solid var(--br);
+  border-radius:18px;
+  background:var(--bg);
+  backdrop-filter:blur(16px);
+  box-shadow:0 12px 40px #00000025;
+}
+
+.card:nth-child(4),
+.card:nth-child(5){
+  grid-column:span 3;
+}
+
+.card.full{
+  grid-column:1/-1;
+}
+
+.card-title{
+  margin-bottom:13px;
+  font-size:15px;
+  font-weight:700;
+  color:#ffffffd9;
+}
+
+.links{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.link{
+  display:block;
+  text-decoration:none;
+  color:#fff;
+  padding:11px 12px;
+  border:1px solid transparent;
+  border-radius:11px;
+  background:var(--item);
+  transition:.18s ease;
+}
+
+.link:hover{
+  transform:translateY(-1px);
+  border-color:#38bdf83d;
+  background:#38bdf814;
+}
+
+.link-name{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.link-icon{
+  width:22px;
+  height:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  color:#7dd3fc;
+  filter:drop-shadow(0 0 6px #38bdf82a);
+}
+
+.link-icon svg{
+  width:22px;
+  height:22px;
+  display:block;
+  overflow:visible;
+}
+
+.icon-stroke{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.65;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.icon-fill{
+  fill:currentColor;
+}
+
+.download-link{
+  border-color:#ffffff12;
+}
+
+.download-link:hover{
+  border-color:#38bdf855;
+  background:#38bdf80d;
+}
+
+.link-sub{
+  margin-top:3px;
+  margin-left:33px;
+  color:#ffffff55;
+  font-size:11px;
+}
+
+.notes{
+  margin-top:16px;
+}
+
+.note-tabs{
+  display:flex;
+  gap:7px;
+  margin-bottom:10px;
+}
+
+.note-tab{
+  padding:8px 13px;
+  border:1px solid var(--br);
+  border-radius:9px;
+  background:#ffffff08;
+  color:#ffffff99;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.note-tab.active{
+  color:#fff;
+  border-color:#38bdf866;
+  background:#38bdf814;
+}
+
+.note-editor{
+  width:100%;
+  min-height:180px;
+  resize:vertical;
+  padding:14px;
+  border:1px solid var(--br);
+  border-radius:12px;
+  outline:none;
+  background:#00000020;
+  color:#fff;
+  font:14px/1.5 Arial,Helvetica,sans-serif;
+}
+
+.note-editor:focus{
+  border-color:#38bdf855;
+}
+
+.note-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:8px;
+}
+
+.note-status{
+  color:#ffffff55;
+  font-size:11px;
+}
+
+.clear-note{
+  padding:7px 10px;
+  border:1px solid #ef444433;
+  border-radius:8px;
+  background:#ef44440b;
+  color:#fca5a5;
+  cursor:pointer;
+  font-size:11px;
+}
+
+.clear-note:hover{
+  background:#ef444418;
+}
+
+.tasks{
+  margin-top:16px;
+}
+
+.tasks-title{
+  margin-bottom:9px;
+  color:#ffffffb8;
+  font-size:13px;
+  font-weight:700;
+}
+
+.task-add{
+  display:flex;
+  gap:8px;
+}
+
+.task-input{
+  min-width:0;
+  flex:1;
+  padding:10px 12px;
+  border:1px solid var(--br);
+  border-radius:10px;
+  outline:none;
+  background:#ffffff08;
+  color:#fff;
+}
+
+.task-input:focus{
+  border-color:#38bdf855;
+}
+
+.add-task{
+  padding:10px 14px;
+  border:0;
+  border-radius:10px;
+  background:#38bdf8;
+  color:#061018;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.add-task:hover{
+  background:#7dd3fc;
+}
+
+.task-list{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  margin:10px 0 0;
+  padding:0;
+  list-style:none;
+}
+
+.task-item{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+  padding:9px 10px;
+  border:1px solid var(--br);
+  border-radius:10px;
+  background:#ffffff08;
+}
+
+.task-checkbox{
+  width:16px;
+  height:16px;
+  accent-color:#38bdf8;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.task-text{
+  min-width:0;
+  flex:1;
+  font-size:13px;
+  overflow-wrap:anywhere;
+}
+
+.task-item.completed .task-text{
+  color:#ffffff55;
+  text-decoration:line-through;
+}
+
+.delete-task{
+  border:0;
+  background:transparent;
+  color:#ffffff55;
+  cursor:pointer;
+  font-size:18px;
+  line-height:1;
+}
+
+.delete-task:hover{
+  color:#f87171;
+}
+
+.empty-tasks{
+  padding:10px;
+  color:#ffffff45;
+  font-size:12px;
+  text-align:center;
+}
+
+.signature{
+  position:fixed;
+  right:18px;
+  bottom:14px;
+  color:#ffffff35;
+  font-size:11px;
+  pointer-events:none;
+}
+
+@media(max-width:800px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .card,
+  .card:nth-child(4),
+  .card:nth-child(5),
+  .card.full{
+    grid-column:1;
+  }
+}
+
+@media(max-width:500px){
+  .container{
+    width:min(100% - 20px,1200px);
+    padding-top:18px;
+  }
+
+  .clock{
+    font-size:28px;
+  }
+
+  .task-add{
+    flex-direction:column;
+  }
+}
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
 <header class="header">
   <div class="logo">🌐</div>
   <div class="clock" id="clock">00:00:00</div>
   <div class="date" id="date">Загрузка...</div>
+
   <button class="task-indicator" id="taskIndicator" onclick="scrollToTasks()">
     <span id="indicatorIcon">🔔</span>
     <span id="indicatorText">Загрузка задач...</span>
@@ -61,187 +459,614 @@ body{min-height:100vh;padding:40px 20px 60px;color:var(--t);background:#0b0f19;b
 
 <div class="search-box">
   <form class="search-form" action="https://www.google.com/search" method="get">
-    <input class="search-input" type="text" name="q" placeholder="Поиск в Интернете..." autofocus autocomplete="off">
+    <input
+      class="search-input"
+      type="text"
+      name="q"
+      placeholder="Поиск в Интернете..."
+      autofocus
+      autocomplete="off"
+    >
   </form>
 </div>
 
 <div class="grid">
 
+<!-- Главное -->
 <div class="card">
   <div class="card-title">Главное</div>
-  <ul class="link-list">
-    <li class="link-item"><a href="https://youtube.com" target="_blank">YouTube</a></li>
-    <li class="link-item"><a href="https://vk.com" target="_blank">VK</a></li>
-    <li class="link-item"><a href="https://mail.google.com" target="_blank">Gmail</a></li>
-    <li class="link-item"><a href="https://drive.google.com" target="_blank">Google Drive</a></li>
-  </ul>
+
+  <div class="links">
+
+    <!-- YouTube -->
+    <a class="link" href="https://youtube.com" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <rect class="icon-stroke" x="3" y="6" width="18" height="12" rx="3"/>
+            <path class="icon-stroke" d="m10 9 5 3-5 3V9Z"/>
+          </svg>
+        </span>
+        YouTube
+      </div>
+    </a>
+
+    <!-- VK -->
+    <a class="link" href="https://vk.com" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <rect class="icon-stroke" x="3" y="3" width="18" height="18" rx="5"/>
+            <path class="icon-stroke" d="M7 9c1.2 3.2 3.1 5.3 5.2 5.3V9"/>
+            <path class="icon-stroke" d="M12.2 14.3c1.8 0 3.1-1.3 4.2-3.5"/>
+            <path class="icon-stroke" d="M12.2 9h2.3"/>
+          </svg>
+        </span>
+        VK
+      </div>
+    </a>
+
+    <!-- Gmail -->
+    <a class="link" href="https://mail.google.com" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <rect class="icon-stroke" x="3" y="5" width="18" height="14" rx="2"/>
+            <path class="icon-stroke" d="m4 7 8 6 8-6"/>
+          </svg>
+        </span>
+        Gmail
+      </div>
+    </a>
+
+    <!-- Google Drive -->
+    <a class="link" href="https://drive.google.com" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <path class="icon-stroke" d="m9 3-5.5 9.5L7 19h10l3.5-6.5L15 3H9Z"/>
+            <path class="icon-stroke" d="M9 3h6"/>
+            <path class="icon-stroke" d="M3.5 12.5h17"/>
+          </svg>
+        </span>
+        Google Drive
+      </div>
+    </a>
+
+    <!-- ChatGPT -->
+    <a class="link" href="https://chatgpt.com" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <path class="icon-stroke" d="M8.2 7.2a4.1 4.1 0 0 1 7.5 1.2 4.1 4.1 0 0 1 1.2 7.8 4.1 4.1 0 0 1-7.2 1.3 4.1 4.1 0 0 1-1.4-7.4A4.1 4.1 0 0 1 8.2 7.2Z"/>
+            <path class="icon-stroke" d="m8.2 7.2 5.1 2.9v5.8"/>
+            <path class="icon-stroke" d="m16.9 8.4-5.2 3v5.8"/>
+            <path class="icon-stroke" d="m9.7 17.5 5.2-3"/>
+          </svg>
+        </span>
+        ChatGPT
+      </div>
+    </a>
+
+    <!-- Gemini -->
+    <a class="link" href="https://gemini.google.com" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <path class="icon-stroke" d="M12 3c.8 4.8 4.2 8.2 9 9-4.8.8-8.2 4.2-9 9-.8-4.8-4.2-8.2-9-9 4.8-.8 8.2-4.2 9-9Z"/>
+          </svg>
+        </span>
+        Gemini
+      </div>
+    </a>
+
+  </div>
 </div>
 
+<!-- Рабочий софт -->
 <div class="card">
   <div class="card-title">Рабочий софт</div>
-  <ul class="link-list">
-    <li class="link-item download-link"><a href="https://drive.google.com/uc?export=download&id=1854PH1qpLl9852mbHODo_ET6wtMNNWh5" target="_blank">Connect Setup <span class="badge">.rar</span></a></li>
-    <li class="link-item download-link"><a href="https://vdi.tb.ru/windows" target="_blank">Horizon Client <span class="badge">download</span></a></li>
-  </ul>
+
+  <div class="links">
+
+    <!-- Connect Setup -->
+    <a class="link" href="https://drive.google.com/uc?export=download&id=1854PH1qpLl9852mbHODo_ET6wtMNNWh5" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <rect class="icon-stroke" x="5" y="3.5" width="14" height="17" rx="2"/>
+            <path class="icon-stroke" d="M8 8h8M8 12h8M8 16h5"/>
+            <path class="icon-stroke" d="M12 3.5v-1"/>
+          </svg>
+        </span>
+        Connect Setup
+      </div>
+    </a>
+
+    <!-- Horizon -->
+    <a class="link" href="https://vdi.tb.ru/windows" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <rect class="icon-stroke" x="3" y="4.5" width="18" height="13" rx="2"/>
+            <path class="icon-stroke" d="M8 21h8M12 17.5V21"/>
+            <path class="icon-stroke" d="M7 8h4M7 11h7"/>
+          </svg>
+        </span>
+        Horizon Client
+      </div>
+    </a>
+
+  </div>
 </div>
 
+<!-- Игры и Драйверы -->
 <div class="card">
   <div class="card-title">Игры и Драйверы</div>
-  <ul class="link-list">
-    <li class="link-item download-link"><a href="https://store.steampowered.com/about/" target="_blank">Steam <span class="badge">download</span></a></li>
-    <li class="link-item download-link"><a href="https://store.epicgames.com/en-US/download" target="_blank">Epic Games <span class="badge">download</span></a></li>
-    <li class="link-item download-link"><a href="https://www.nvidia.com/en-us/software/nvidia-app/" target="_blank">NVIDIA App <span class="badge">download</span></a></li>
-    <li class="link-item download-link"><a href="https://drive.google.com/file/d/1uMfRt66ac9AfvYoXQlEmAk7eq7EfSAI7/view?usp=sharing" target="_blank">Discord <span class="badge">download</span></a></li>
-  </ul>
+
+  <div class="links">
+
+    <!-- Steam -->
+    <a class="link" href="https://store.steampowered.com/about/" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <circle class="icon-stroke" cx="12" cy="12" r="8.5"/>
+            <circle class="icon-stroke" cx="16.3" cy="7.7" r="2"/>
+            <circle class="icon-stroke" cx="11.2" cy="12.8" r="2"/>
+            <path class="icon-stroke" d="m12.9 11.8 2.1-2.1"/>
+            <path class="icon-stroke" d="m9.5 14-3.8 1.8"/>
+          </svg>
+        </span>
+        Steam
+      </div>
+    </a>
+
+    <!-- Epic Games -->
+    <a class="link" href="https://store.epicgames.com/en-US/download" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <path class="icon-stroke" d="M7 3.5h10v17H7z"/>
+            <path class="icon-stroke" d="M9.5 7h5M9.5 10h5M9.5 13h3"/>
+            <path class="icon-stroke" d="M9.5 16h5"/>
+          </svg>
+        </span>
+        Epic Games
+      </div>
+    </a>
+
+    <!-- NVIDIA -->
+    <a class="link" href="https://www.nvidia.com/en-us/software/nvidia-app/" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <path class="icon-stroke" d="M3 11.8c4.2-4.5 10.2-5.3 18-3.2-5.2.6-9 2.7-11.3 6.3"/>
+            <path class="icon-stroke" d="M5.2 13.1c2.6-2 5.5-2.6 8.7-1.9-1.8.7-3.1 1.8-4 3.3"/>
+            <circle class="icon-stroke" cx="15.7" cy="11.8" r="1.6"/>
+          </svg>
+        </span>
+        NVIDIA App
+      </div>
+    </a>
+
+    <!-- Discord -->
+    <a class="link" href="https://drive.google.com/file/d/1uMfRt66ac9AfvYoXQlEmAk7eq7EfSAI7/view?usp=sharing" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <path class="icon-stroke" d="M7 8c1.5-1.1 3.2-1.7 5-1.7S15.5 6.9 17 8c1.1 1.6 1.7 3.4 1.7 5.3 0 2-1.7 3.2-3.5 3.7l-1-1.3c-1.4.5-3 .5-4.4 0l-1 1.3c-1.8-.5-3.5-1.7-3.5-3.7C5.3 11.4 5.9 9.6 7 8Z"/>
+            <circle class="icon-stroke" cx="9.5" cy="12.3" r="1"/>
+            <circle class="icon-stroke" cx="14.5" cy="12.3" r="1"/>
+            <path class="icon-stroke" d="M7 8 5.5 6.8M17 8l1.5-1.2"/>
+          </svg>
+        </span>
+        Discord
+      </div>
+    </a>
+
+  </div>
 </div>
 
+<!-- Софт и Система -->
 <div class="card">
   <div class="card-title">Софт и Система</div>
-  <ul class="link-list">
-    <li class="link-item download-link"><a href="https://www.google.com/chrome/" target="_blank">Google Chrome <span class="badge">download</span></a></li>
-    <li class="link-item download-link"><a href="https://drive.google.com/uc?export=download&id=1NZCrzRdn3aOfpjHfYUbQN7s8FYKEZDlV" target="_blank">Telegram Desktop <span class="badge">.exe</span></a></li>
-    <li class="link-item download-link"><a href="https://www.qbittorrent.org/download" target="_blank">qBittorrent <span class="badge">download</span></a></li>
-    <li class="link-item download-link"><a href="https://www.videolan.org/vlc/" target="_blank">VLC Player <span class="badge">download</span></a></li>
-    <li class="link-item download-link"><a href="https://www.rarlab.com/download.htm" target="_blank">WinRAR x64 <span class="badge">download</span></a></li>
-    <li class="link-item download-link"><a href="https://www.7-zip.org/download.html" target="_blank">7-Zip <span class="badge">download</span></a></li>
-  </ul>
+
+  <div class="links">
+
+    <!-- Chrome -->
+    <a class="link" href="https://www.google.com/chrome/" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <circle class="icon-stroke" cx="12" cy="12" r="8.5"/>
+            <circle class="icon-stroke" cx="12" cy="12" r="3"/>
+            <path class="icon-stroke" d="M12 9V3.5M14.6 13.5l5-2.2M9.4 13.5l-5-2.2"/>
+          </svg>
+        </span>
+        Google Chrome
+      </div>
+    </a>
+
+    <!-- Telegram -->
+    <a class="link" href="https://drive.google.com/uc?export=download&id=1NZCrzRdn3aOfpjHfYUbQN7s8FYKEZDlV" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <path class="icon-stroke" d="m4 11.7 15.8-6.2-4.2 13.9-3.5-5.1L4 11.7Z"/>
+            <path class="icon-stroke" d="m12.1 14.3 3.7-4.5"/>
+            <path class="icon-stroke" d="m12.1 14.3-1.3 3.5"/>
+          </svg>
+        </span>
+        Telegram Desktop
+      </div>
+    </a>
+
+    <!-- qBittorrent -->
+    <a class="link" href="https://www.qbittorrent.org/download" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <circle class="icon-stroke" cx="12" cy="12" r="8.5"/>
+            <path class="icon-stroke" d="M8 16V8h4.5a3 3 0 0 1 0 6H8"/>
+            <path class="icon-stroke" d="M14 14.2 17 17"/>
+          </svg>
+        </span>
+        qBittorrent
+      </div>
+    </a>
+
+    <!-- VLC -->
+    <a class="link" href="https://www.videolan.org/vlc/" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <path class="icon-stroke" d="M9.5 4h5l-.8 3h-3.4l-.8-3Z"/>
+            <path class="icon-stroke" d="M8.5 7h7l1.2 4h-9.4l1.2-4Z"/>
+            <path class="icon-stroke" d="M6.8 11h10.4l1.3 4H5.5l1.3-4Z"/>
+            <path class="icon-stroke" d="M5 15h14l1.5 4H3.5L5 15Z"/>
+          </svg>
+        </span>
+        VLC
+      </div>
+    </a>
+
+    <!-- WinRAR -->
+    <a class="link" href="https://www.rarlab.com/download.htm" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <rect class="icon-stroke" x="6" y="3" width="12" height="18" rx="1.5"/>
+            <path class="icon-stroke" d="M6 7h12M6 11h12M6 15h12"/>
+            <path class="icon-stroke" d="M12 3v18"/>
+          </svg>
+        </span>
+        WinRAR x64
+      </div>
+    </a>
+
+    <!-- 7-Zip -->
+    <a class="link" href="https://www.7-zip.org/download.html" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <path class="icon-stroke" d="M4 7h16v13H4z"/>
+            <path class="icon-stroke" d="M4 7 7 4h10l3 3"/>
+            <path class="icon-stroke" d="M8 10h8M8 14h8"/>
+          </svg>
+        </span>
+        7-Zip
+      </div>
+    </a>
+
+  </div>
 </div>
 
+<!-- Обход / Сеть -->
 <div class="card">
   <div class="card-title">Обход / Сеть</div>
-  <ul class="link-list">
-    <li class="link-item download-link"><a href="https://github.com/Flowseal/zapret-discord-youtube/releases" target="_blank">Zapret Discord/YT <span class="badge">releases</span></a></li>
-    <li class="link-item download-link"><a href="https://github.com/Flowseal/tg-ws-proxy/releases" target="_blank">TG WS Proxy <span class="badge">releases</span></a></li>
-    <li class="link-item download-link"><a href="https://github.com/Takeh1ko/GeoFree" target="_blank">GeoFree AI <span class="badge">GitHub</span></a></li>
-  </ul>
+
+  <div class="links">
+
+    <!-- GitHub -->
+    <a class="link" href="https://github.com/Flowseal/zapret-discord-youtube/releases" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <path class="icon-fill" d="M12 2.7a9.3 9.3 0 0 0-2.94 18.13c.47.09.64-.2.64-.45v-1.62c-2.61.57-3.16-1.1-3.16-1.1-.43-1.07-1.04-1.35-1.04-1.35-.85-.58.06-.57.06-.57.94.07 1.43.96 1.43.96.83 1.42 2.18 1.01 2.71.77.08-.6.32-1.01.58-1.24-2.08-.24-4.27-1.04-4.27-4.59 0-1.01.36-1.84.96-2.49-.1-.24-.41-1.18.09-2.47 0 0 .78-.25 2.55.97a8.7 8.7 0 0 1 4.64 0c1.77-1.22 2.55-.97 2.55-.97.5 1.29.19 2.23.09 2.47.6.65.96 1.48.96 2.49 0 3.56-2.19 4.35-4.28 4.59.34.29.63.84.63 1.69v2.5c0 .25.17.54.65.45A9.3 9.3 0 0 0 12 2.7Z"/>
+          </svg>
+        </span>
+        Zapret Discord / YouTube
+      </div>
+    </a>
+
+    <!-- GitHub -->
+    <a class="link" href="https://github.com/Flowseal/tg-ws-proxy/releases" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <path class="icon-fill" d="M12 2.7a9.3 9.3 0 0 0-2.94 18.13c.47.09.64-.2.64-.45v-1.62c-2.61.57-3.16-1.1-3.16-1.1-.43-1.07-1.04-1.35-1.04-1.35-.85-.58.06-.57.06-.57.94.07 1.43.96 1.43.96.83 1.42 2.18 1.01 2.71.77.08-.6.32-1.01.58-1.24-2.08-.24-4.27-1.04-4.27-4.59 0-1.01.36-1.84.96-2.49-.1-.24-.41-1.18.09-2.47 0 0 .78-.25 2.55.97a8.7 8.7 0 0 1 4.64 0c1.77-1.22 2.55-.97 2.55-.97.5 1.29.19 2.23.09 2.47.6.65.96 1.48.96 2.49 0 3.56-2.19 4.35-4.28 4.59.34.29.63.84.63 1.69v2.5c0 .25.17.54.65.45A9.3 9.3 0 0 0 12 2.7Z"/>
+          </svg>
+        </span>
+        TG WS Proxy
+      </div>
+    </a>
+
+    <!-- GitHub -->
+    <a class="link" href="https://github.com/Takeh1ko/GeoFree" target="_blank">
+      <div class="link-name">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24">
+            <path class="icon-fill" d="M12 2.7a9.3 9.3 0 0 0-2.94 18.13c.47.09.64-.2.64-.45v-1.62c-2.61.57-3.16-1.1-3.16-1.1-.43-1.07-1.04-1.35-1.04-1.35-.85-.58.06-.57.06-.57.94.07 1.43.96 1.43.96.83 1.42 2.18 1.01 2.71.77.08-.6.32-1.01.58-1.24-2.08-.24-4.27-1.04-4.27-4.59 0-1.01.36-1.84.96-2.49-.1-.24-.41-1.18.09-2.47 0 0 .78-.25 2.55.97a8.7 8.7 0 0 1 4.64 0c1.77-1.22 2.55-.97 2.55-.97.5 1.29.19 2.23.09 2.47.6.65.96 1.48.96 2.49 0 3.56-2.19 4.35-4.28 4.59.34.29.63.84.63 1.69v2.5c0 .25.17.54.65.45A9.3 9.3 0 0 0 12 2.7Z"/>
+          </svg>
+        </span>
+        GeoFree AI
+      </div>
+    </a>
+
+  </div>
 </div>
 
-<div class="card notes-card" id="notesCard">
+<!-- Блокноты -->
+<div class="card full notes" id="notesCard">
+
   <div class="card-title">Блокноты</div>
 
-  <div class="notes-tabs">
+  <div class="note-tabs">
     <button class="note-tab active" onclick="switchNote(0)">Личное</button>
     <button class="note-tab" onclick="switchNote(1)">Работа</button>
     <button class="note-tab" onclick="switchNote(2)">Идеи</button>
   </div>
 
-  <textarea id="noteEditor" class="note-editor" placeholder="Пиши здесь..."></textarea>
+  <textarea
+    class="note-editor"
+    id="noteEditor"
+    placeholder="Пиши здесь..."
+  ></textarea>
 
-  <div class="notes-bottom">
+  <div class="note-bottom">
     <span class="note-status" id="noteStatus">Сохраняется автоматически</span>
     <button class="clear-note" onclick="clearCurrentNote()">Очистить</button>
   </div>
 
-  <div class="tasks-section">
+  <div class="tasks">
+
     <div class="tasks-title">Задачи</div>
-    <div class="task-input-row">
-      <input id="taskInput" class="task-input" type="text" placeholder="Например: скачать драйвер" autocomplete="off">
-      <button class="add-task" onclick="addTask()">+ Добавить</button>
+
+    <div class="task-add">
+      <input
+        class="task-input"
+        id="taskInput"
+        type="text"
+        placeholder="Новая задача..."
+      >
+      <button class="add-task" onclick="addTask()">Добавить</button>
     </div>
-    <ul id="taskList" class="task-list"></ul>
+
+    <ul class="task-list" id="taskList"></ul>
+
   </div>
 </div>
 
-</div>
 </div>
 
 <div class="signature">By Tsoykkk</div>
 
 <script>
-const notes=['','',''],tasks=[[],[],[]];let currentNote=0;
+const notes=['','',''];
+const tasks=[[],[],[]];
+let currentNote=0;
 
 function updateClock(){
   const n=new Date();
-  clock.textContent=n.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  date.textContent=n.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+  clock.textContent=n.toLocaleTimeString('ru-RU',{
+    hour:'2-digit',
+    minute:'2-digit',
+    second:'2-digit'
+  });
+
+  date.textContent=n.toLocaleDateString('ru-RU',{
+    weekday:'long',
+    day:'numeric',
+    month:'long',
+    year:'numeric'
+  });
 }
-updateClock();setInterval(updateClock,1000);
+
+updateClock();
+setInterval(updateClock,1000);
 
 for(let i=0;i<3;i++){
   notes[i]=localStorage.getItem('personalHubNote_'+i)||'';
-  try{tasks[i]=JSON.parse(localStorage.getItem('personalHubTasks_'+i)||'[]')}catch{tasks[i]=[]}
+
+  try{
+    tasks[i]=JSON.parse(
+      localStorage.getItem('personalHubTasks_'+i)||'[]'
+    );
+  }catch{
+    tasks[i]=[];
+  }
 }
+
 noteEditor.value=notes[0];
 
 function switchNote(i){
   notes[currentNote]=noteEditor.value;
-  localStorage.setItem('personalHubNote_'+currentNote,noteEditor.value);
+
+  localStorage.setItem(
+    'personalHubNote_'+currentNote,
+    noteEditor.value
+  );
+
   currentNote=i;
   noteEditor.value=notes[i];
-  document.querySelectorAll('.note-tab').forEach((t,n)=>t.classList.toggle('active',n===i));
+
+  document.querySelectorAll('.note-tab').forEach((t,n)=>{
+    t.classList.toggle('active',n===i);
+  });
+
   renderTasks();
   noteStatus.textContent='Блокнот переключён';
 }
 
 noteEditor.oninput=()=>{
   notes[currentNote]=noteEditor.value;
-  localStorage.setItem('personalHubNote_'+currentNote,noteEditor.value);
+
+  localStorage.setItem(
+    'personalHubNote_'+currentNote,
+    noteEditor.value
+  );
+
   noteStatus.textContent='Сохранено';
+
   clearTimeout(window.saveTimer);
-  window.saveTimer=setTimeout(()=>noteStatus.textContent='Сохраняется автоматически',1200);
+
+  window.saveTimer=setTimeout(()=>{
+    noteStatus.textContent='Сохраняется автоматически';
+  },1200);
 };
 
 function clearCurrentNote(){
   if(!confirm('Очистить этот блокнот?'))return;
+
   noteEditor.value=notes[currentNote]='';
-  localStorage.removeItem('personalHubNote_'+currentNote);
+
+  localStorage.removeItem(
+    'personalHubNote_'+currentNote
+  );
+
   noteStatus.textContent='Блокнот очищен';
 }
 
 function saveTasks(){
-  localStorage.setItem('personalHubTasks_'+currentNote,JSON.stringify(tasks[currentNote]));
+  localStorage.setItem(
+    'personalHubTasks_'+currentNote,
+    JSON.stringify(tasks[currentNote])
+  );
 }
 
 function renderTasks(){
   taskList.innerHTML='';
+
   if(!tasks[currentNote].length){
-    taskList.innerHTML='<li class="empty-tasks">Задач пока нет</li>';
+    taskList.innerHTML=
+      '<li class="empty-tasks">Задач пока нет</li>';
+
     updateTaskIndicator();
     return;
   }
 
   tasks[currentNote].forEach((task,i)=>{
+
     const li=document.createElement('li');
-    li.className='task-item'+(task.completed?' completed':'');
+
+    li.className=
+      'task-item'+
+      (task.completed?' completed':'');
+
     const cb=document.createElement('input');
-    cb.type='checkbox';cb.className='task-checkbox';cb.checked=task.completed;
-    cb.onchange=()=>{task.completed=cb.checked;saveTasks();renderTasks()};
+
+    cb.type='checkbox';
+    cb.className='task-checkbox';
+    cb.checked=task.completed;
+
+    cb.onchange=()=>{
+      task.completed=cb.checked;
+      saveTasks();
+      renderTasks();
+    };
+
     const text=document.createElement('span');
-    text.className='task-text';text.textContent=task.text;
+
+    text.className='task-text';
+    text.textContent=task.text;
+
     const del=document.createElement('button');
-    del.className='delete-task';del.textContent='×';del.title='Удалить задачу';
-    del.onclick=()=>{tasks[currentNote].splice(i,1);saveTasks();renderTasks()};
-    li.append(cb,text,del);taskList.appendChild(li);
+
+    del.className='delete-task';
+    del.textContent='×';
+    del.title='Удалить задачу';
+
+    del.onclick=()=>{
+      tasks[currentNote].splice(i,1);
+      saveTasks();
+      renderTasks();
+    };
+
+    li.append(cb,text,del);
+    taskList.appendChild(li);
   });
+
   updateTaskIndicator();
 }
 
 function addTask(){
   const text=taskInput.value.trim();
+
   if(!text)return;
-  tasks[currentNote].push({text,completed:false});
-  saveTasks();renderTasks();taskInput.value='';taskInput.focus();
+
+  tasks[currentNote].push({
+    text,
+    completed:false
+  });
+
+  saveTasks();
+  renderTasks();
+
+  taskInput.value='';
+  taskInput.focus();
 }
 
 taskInput.onkeydown=e=>{
-  if(e.key==='Enter'){e.preventDefault();addTask()}
+  if(e.key==='Enter'){
+    e.preventDefault();
+    addTask();
+  }
 };
 
 function updateTaskIndicator(){
-  const n=tasks[currentNote].filter(t=>!t.completed).length;
-  taskIndicator.classList.toggle('all-done',n===0);
-  indicatorIcon.textContent=n?'🔔':'✓';
-  indicatorText.textContent=n?(n===1?'Незавершённая задача':'Незавершённые задачи'):'Все задачи выполнены';
+
+  const n=
+    tasks[currentNote]
+      .filter(t=>!t.completed)
+      .length;
+
+  taskIndicator.classList.toggle(
+    'all-done',
+    n===0
+  );
+
+  indicatorIcon.textContent=
+    n?'🔔':'✓';
+
+  indicatorText.textContent=
+    n
+      ?(n===1
+        ?'Незавершённая задача'
+        :'Незавершённые задачи')
+      :'Все задачи выполнены';
+
   indicatorCount.textContent=n;
-  indicatorCount.style.display=n?'inline-flex':'none';
+
+  indicatorCount.style.display=
+    n?'inline-flex':'none';
 }
 
 function scrollToTasks(){
-  notesCard.scrollIntoView({behavior:'smooth',block:'start'});
-  setTimeout(()=>taskInput.focus(),500);
+
+  notesCard.scrollIntoView({
+    behavior:'smooth',
+    block:'start'
+  });
+
+  setTimeout(()=>{
+    taskInput.focus();
+  },500);
 }
 
 renderTasks();
 </script>
+
 </body>
 </html>
